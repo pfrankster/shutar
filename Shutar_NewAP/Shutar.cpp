@@ -5,6 +5,7 @@
 #include <c2d2\ator.h>
 
 #include "AtorManager.h"
+#include "Nave.h"
 
 #define LARGURA_TELA 1024
 #define ALTURA_TELA 578
@@ -14,6 +15,16 @@ unsigned int musicas[3];
 unsigned int logoPUC, jogorolando;
 
 bool tocandomusica = false; 
+
+
+//Personagens do jogo
+Ator *nave;
+Ator *tiro;
+Ator *prop;
+Ator **inimigos;
+Ator **ocorrencias;
+Ator *redboss;
+
 
 Shutar::Shutar()
 {
@@ -25,12 +36,15 @@ Shutar::Shutar()
 		printf("erro ao carregar a chien");
 
 	//carrega audio chien
-
 	CA2_Inicia();
+
+	//inicia atores da chien
+	ATOR_Inicia(); 
 }
 
 void Shutar::Setup()
 {
+	//musicas do jogo
 	musicas[0] = CA2_CarregaMusica("");
 	musicas[1] = CA2_CarregaMusica("splashloop.wav");
 	musicas[2] = CA2_CarregaMusica("bgloop.wav");
@@ -40,8 +54,22 @@ void Shutar::Setup()
 	logoPUC = C2D2_CarregaSpriteSet("splashprojeto.png", 0, 0);
 	jogorolando = C2D2_CarregaSpriteSet("jogorolando.png", 0, 0);
 
-	//carrega atores
+	//carrega atores do jogo
 
+	bool cnave = Nave_Carrega(); 
+		
+
+	if (cnave)
+	{
+		int xinit = 0, yinit = 0;
+		// cria o personagem
+		//--->>>>>>>>>>>>>>>>>>>>>>>> C2D2M_PrimeiroBlocoMarca(0, C2D2M_INICIO, &xinit, &yinit); 
+		//--->nave = ATOR_CriaAtor(NAVE, xinit, yinit, 0);
+		
+		nave = ATOR_CriaAtor(NAVE, 0, xinit, yinit);
+
+		
+	}
 	
 
 }
@@ -53,15 +81,23 @@ void Shutar::Update(int gamestate)
 	C2D2_Mouse* mouse = C2D2_PegaMouse();
 
 	if (gamestate == 1)
+	{
 		if (teclas[C2D2_ENTER].pressionado){ GameState = 2; CA2_FadeMusica(2); tocandomusica = false; }
-		if (teclas[C2D2_ESC].pressionado){ 		GameState = 10; 	}
+		if (teclas[C2D2_ESC].pressionado){ GameState = 10; }
+	}
 
 
 	if (gamestate == 2)
+	{
 		if (teclas[C2D2_ESC].pressionado){ GameState = 1; tocandomusica = false; }
+		Nave_ProcessaControle(nave);
+			ATOR_AplicaEstado(nave, 0, LARGURA_TELA, ALTURA_TELA);
+			Nave_Atualiza(nave, 0);
+	}
 
 
 }
+
 
 
 
@@ -80,6 +116,7 @@ void Shutar::Draw()
 	case 2:
 		//Desenha Splash
 		C2D2_DesenhaSprite(jogorolando, 0, 0, 0);
+		ATOR_Desenha(nave, 0, LARGURA_TELA / 2, ALTURA_TELA / 2);
 
 
 		break;

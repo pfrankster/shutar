@@ -1,5 +1,5 @@
 #include <c2d2/chien2d2.h>
-
+#include <c2d2\chien2d2mapa.h>
 #include "AtorManager.h"
 #include "Nave.h"
 #include <math.h>
@@ -30,10 +30,10 @@ bool Nave_Carrega()
 	return ATOR_CarregaAtorEstatico(NAVE, "nave_sheet.png", 96, 96, 5, 5, 90, 90, animaNave, true, sons, 2, &Nave_Atualiza);
 }
 
-// A função para fazer a lógica do DarkPhoenix
+// A função para fazer a lógica da Nave
 //
-// Data: 04/09/2008
-// Última atualização: 04/09/2008
+// Data: 06/06/2015
+// Última atualização: 04/07/2015
 //
 bool Nave_Atualiza(Ator *a, unsigned int mapa)
 {
@@ -133,7 +133,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 				break;
 
-				/************************************************************************/
+				/**********************ACHOU CHECKPOINTS **************************************************/
 			case EVT_CHECKPOINT:
 
 				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
@@ -385,3 +385,89 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 	}
 	return true;
 }
+
+
+void Nave_ProcessaControle(Ator *a)
+{
+	int VTIRO = 3;
+	int tiroType = 1;
+
+	static Evento ev;
+	static C2D2_Botao *teclado = C2D2_PegaTeclas();
+	static C2D2_Mouse *mouse = C2D2_PegaMouse();
+
+	if (teclado[C2D2_1].pressionado)
+	{
+		tiroType = 1;
+		VTIRO = 6;
+	}
+	if (teclado[C2D2_2].pressionado)
+	{
+		tiroType = 2;
+		VTIRO = 12;
+	}
+	if (teclado[C2D2_3].pressionado)
+	{
+		tiroType = 3;
+		VTIRO = 16;
+	}
+	if (teclado[C2D2_4].pressionado)
+	{
+		tiroType = 4;
+		VTIRO = 30;
+	}
+
+
+	if (teclado[C2D2_ESPACO].ativo)
+	{
+		ev.tipoEvento = EVT_PRESSIONOU_BOTAO1;
+		ATOR_EnviaEvento(a, &ev);
+
+
+
+	}
+
+	if (teclado[C2D2_ESPACO].liberado)
+	{
+		ev.tipoEvento = EVT_LIBEROU_BOTAO1;
+		ATOR_EnviaEvento(a, &ev);
+	}
+
+
+
+	//GERA TIRO 
+	if (mouse->botoes[0].pressionado)
+	{
+		ev.tipoEvento = EVT_PRESSIONOU_BOTAO3;
+		ATOR_EnviaEvento(a, &ev);
+	}
+
+	/*freio nave */
+	if (mouse->botoes[1].ativo)
+	{
+		ev.tipoEvento = EVT_PRESSIONOU_BOTAO2;
+		ATOR_EnviaEvento(a, &ev);
+
+	}
+
+	if (mouse->botoes[3].liberado)
+	{
+		/*	ev.tipoEvento = EVT_LIBEROU_BOTAO2;
+		ATOR_EnviaEvento(a, &ev);
+		*/
+	}
+
+
+
+	// Manda a posição do mouse
+	int x1, y1;
+	C2D2M_PosicaoXY(0, &x1, &y1);
+
+	ev.tipoEvento = EVT_POSICAO;
+	ev.x = x1 + mouse->x - 12;
+	ev.y = y1 + mouse->y + 12;
+	ATOR_EnviaEvento(a, &ev);
+
+
+}
+

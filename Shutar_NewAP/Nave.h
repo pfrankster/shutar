@@ -6,6 +6,9 @@
 #define VNAVE	3
 #define VPULO   1000
 
+//ALGUMAS PROPRIEDADES DA NAVE
+
+
 
 // Enumeração dos estados da atriz do jogo
 enum {
@@ -18,6 +21,6 @@ enum {
 bool Nave_Carrega();
 // A função para fazer a lógica da atriz
 bool Nave_Atualiza(Ator *a, unsigned int mapa);
-
+void Nave_ProcessaControle(Ator *a); 
 
 #endif
