@@ -24,12 +24,18 @@
     <ClCompile Include="AtorManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Nave.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shutar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AtorManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

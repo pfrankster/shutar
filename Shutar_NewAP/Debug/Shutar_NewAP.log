@@ -1,15 +1,33 @@
-﻿Build started 03/07/2015 17:26:01.
-     1>Project "c:\Users\Paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Shutar_NewAP\Shutar_NewAP.vcxproj" on node 2 (Build target(s)).
+﻿Build started 04/07/2015 00:12:11.
+     1>Project "c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Shutar_NewAP\Shutar_NewAP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Shutar.cpp
-         Shutar.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Nave.cpp
+         Nave.cpp
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(98): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(127): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(128): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(142): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(143): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(282): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(283): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(296): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(297): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(372): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.lib" /MACHINE:X86 sdl.lib sdlmain.lib opengl32.lib glu32.lib sdl_image.lib sdl_mixer.lib ca2.lib c2d2.lib cator.lib cm2.lib Debug\AtorManager.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.lib" /MACHINE:X86 sdl.lib sdlmain.lib opengl32.lib glu32.lib sdl_image.lib sdl_mixer.lib ca2.lib c2d2.lib cator.lib cm2.lib Debug\AtorManager.obj
+         Debug\Nave.obj
          Debug\Shutar.obj
          Debug\Main.obj
-         Shutar_NewAP.vcxproj -> c:\users\paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.exe
-     1>Done Building Project "c:\Users\Paulo\documents\visual studio 2013\Projects\Shutar_NewAP\Shutar_NewAP\Shutar_NewAP.vcxproj" (Build target(s)).
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>ca2.lib(chienaudio2.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'ca2.lib(chienaudio2.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+     1>c2d2.lib(chien2d2.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'c2d2.lib(chien2d2.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+     1>c2d2.lib(chien2d2_gl.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'c2d2.lib(chien2d2_gl.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+     1>c2d2.lib(chien2d2_sdl.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'c2d2.lib(chien2d2_sdl.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+     1>cator.lib(ator.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cator.lib(ator.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+     1>cm2.lib(chien2d2mapa.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'cm2.lib(chien2d2mapa.obj)' or at 'c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\vc100.pdb'; linking object as if no debug info
+         Shutar_NewAP.vcxproj -> c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.exe
+     1>Done Building Project "c:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Shutar_NewAP\Shutar_NewAP.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.35
+Time Elapsed 00:00:02.00

@@ -1,19 +1,2 @@
-#include "AtorManager.h"
+#include <c2d2\ator.h>
 
-
-AtorManager::AtorManager()
-{
-}
-
-void AtorManager::Atualiza()
-{
-}
-
-void AtorManager::Desenha()
-{
-}
-
-
-AtorManager::~AtorManager()
-{
-}

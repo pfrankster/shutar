@@ -2,6 +2,9 @@
 
 #include <c2d2\chien2d2.h>
 #include <c2d2\chienaudio2.h>
+#include <c2d2\ator.h>
+
+#include "AtorManager.h"
 
 #define LARGURA_TELA 1024
 #define ALTURA_TELA 578
@@ -33,9 +36,13 @@ void Shutar::Setup()
 	musicas[2] = CA2_CarregaMusica("bgloop.wav");
 
 
-	
+	//carrega sprites
 	logoPUC = C2D2_CarregaSpriteSet("splashprojeto.png", 0, 0);
 	jogorolando = C2D2_CarregaSpriteSet("jogorolando.png", 0, 0);
+
+	//carrega atores
+
+	
 
 }
 
@@ -142,6 +149,7 @@ void Shutar::Dispose()
 {
 	//Tudo que for iniciado precisar ser encerrado ... JANELA ATORES SONS ETC 
 	CA2_Encerra();
+	ATOR_Encerra();
 	C2D2_Encerra();
 }
 

@@ -82,11 +82,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AtorManager.cpp" />
+    <ClCompile Include="Nave.cpp" />
     <ClCompile Include="Shutar.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtorManager.h" />
+    <ClInclude Include="Nave.h" />
     <ClInclude Include="Shutar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

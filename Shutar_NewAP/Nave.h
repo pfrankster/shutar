@@ -1,0 +1,23 @@
+#ifndef NAVE_H
+#define NAVE_H
+
+#include <c2d2/ator.h>
+
+#define VNAVE	3
+#define VPULO   1000
+
+
+// Enumeração dos estados da atriz do jogo
+enum {
+	NAVE_PARADA = ATOR_PROG_INI, 
+	NAVE_DESLOCANDO
+};
+
+// A função que carrega o personagem atriz (pra facilitar).
+//
+bool Nave_Carrega();
+// A função para fazer a lógica da atriz
+bool Nave_Atualiza(Ator *a, unsigned int mapa);
+
+
+#endif
