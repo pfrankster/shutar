@@ -2,6 +2,7 @@
 
 #include <c2d2\chien2d2.h>
 #include <c2d2\chienaudio2.h>
+#include <c2d2\chien2d2mapa.h>
 #include <c2d2\ator.h>
 
 #include "AtorManager.h"
@@ -12,7 +13,11 @@
 
 
 unsigned int musicas[3];
-unsigned int logoPUC, jogorolando;
+unsigned int logoPUC, jogorolando, mouseTX;
+
+unsigned int mapa;
+
+int mousePosX, mousePosY;
 
 bool tocandomusica = false; 
 
@@ -40,6 +45,9 @@ Shutar::Shutar()
 
 	//inicia atores da chien
 	ATOR_Inicia(); 
+
+	//inicia sistema de mapa da Chien
+	C2D2M_Inicia(); 
 }
 
 void Shutar::Setup()
@@ -53,22 +61,32 @@ void Shutar::Setup()
 	//carrega sprites
 	logoPUC = C2D2_CarregaSpriteSet("splashprojeto.png", 0, 0);
 	jogorolando = C2D2_CarregaSpriteSet("jogorolando.png", 0, 0);
+	mouseTX = C2D2_CarregaSpriteSet("mira.png", 24, 24);
 
 	//carrega atores do jogo
-
 	bool cnave = Nave_Carrega(); 
+
+	//carrega mapa
+	mapa = C2D2M_CarregaMapaMappy("mapa4.FMP", "sheetstar01.png");
+	
+	int numcamadas = 4;
+	//define a marca inical dos tiles programados da chien
+	C2D2M_CamadaMarcas(mapa, 3, 89);
+
+	C2D2M_VelocidadeCamadaMapa(mapa, numcamadas - 1, 1);
+	// Faz um for esotérico para atribuir as velocidades. Se pra você facilitar, use uma camada só que não dá nada
+	for (int i = 0, vel = numcamadas - 1; i<numcamadas - 1; i++, vel--)
+		C2D2M_VelocidadeCamadaMapa(mapa, i, vel);
+
 		
 
 	if (cnave)
 	{
 		int xinit = 0, yinit = 0;
 		// cria o personagem
-		//--->>>>>>>>>>>>>>>>>>>>>>>> C2D2M_PrimeiroBlocoMarca(0, C2D2M_INICIO, &xinit, &yinit); 
-		//--->nave = ATOR_CriaAtor(NAVE, xinit, yinit, 0);
-		
-		nave = ATOR_CriaAtor(NAVE, 0, xinit, yinit);
-
-		
+		C2D2M_PrimeiroBlocoMarca(mapa, C2D2M_INICIO, &xinit, &yinit); 
+		nave = ATOR_CriaAtor(NAVE, xinit, yinit, 0);
+		//nave = ATOR_CriaAtor(NAVE, xinit, yinit, 0);
 	}
 	
 
@@ -90,6 +108,11 @@ void Shutar::Update(int gamestate)
 	if (gamestate == 2)
 	{
 		if (teclas[C2D2_ESC].pressionado){ GameState = 1; tocandomusica = false; }
+
+		
+		mousePosX = mouse->x;
+		mousePosY = mouse->y;
+
 		Nave_ProcessaControle(nave);
 			ATOR_AplicaEstado(nave, 0, LARGURA_TELA, ALTURA_TELA);
 			Nave_Atualiza(nave, 0);
@@ -115,24 +138,33 @@ void Shutar::Draw()
 		break;
 	case 2:
 		//Desenha Splash
-		C2D2_DesenhaSprite(jogorolando, 0, 0, 0);
-		ATOR_Desenha(nave, 0, LARGURA_TELA / 2, ALTURA_TELA / 2);
+		//C2D2_DesenhaSprite(jogorolando, 0, 0, 0);
+
+		C2D2M_DesenhaCamadaMapa(mapa, 0, 0, 0, LARGURA_TELA, ALTURA_TELA); //desenha estrelas
+		C2D2M_DesenhaCamadaMapa(mapa, 1, 0, 0, LARGURA_TELA, ALTURA_TELA);//desenha planetas
+		C2D2M_DesenhaCamadaMapa(mapa, 2, 0, 0, LARGURA_TELA, ALTURA_TELA);//desenha nuvens
 
 
+		
+		ATOR_CentraMapa(nave, mapa, LARGURA_TELA, ALTURA_TELA);
+
+		ATOR_Desenha(nave, mapa, 0, 0);
+
+		C2D2_DesenhaSprite(mouseTX, 0, mousePosX, mousePosY);
 		break;
 	case 3:
-		//Desenha Splash
+		//Desenha Menu Interno
 
 
 		break;
 	case 4:
-		//Desenha Splash
+		//Desenha GameOver
 
 		break;
 
 	}
 
-	C2D2_Sincroniza(C2D2_FPS_PADRAO);
+	
 }
 
 void Shutar::Run()
@@ -154,7 +186,7 @@ void Shutar::GameLoop()
 			switch (GameState)
 			{
 			case 1:
-				CA2_AjustaVolume(15,-1);
+				CA2_AjustaVolume(25,-1);
 				CA2_TocaMusica(GameState, -1);
 				tocandomusica = true;
 				break;
@@ -177,7 +209,7 @@ void Shutar::GameLoop()
 		Update(GameState);
 		Draw();
 
-		
+		C2D2_Sincroniza(C2D2_FPS_PADRAO);
 	}
 }
 
@@ -185,9 +217,10 @@ void Shutar::GameLoop()
 void Shutar::Dispose()
 {
 	//Tudo que for iniciado precisar ser encerrado ... JANELA ATORES SONS ETC 
-	CA2_Encerra();
-	ATOR_Encerra();
-	C2D2_Encerra();
+	CA2_Encerra(); //audio
+	ATOR_Encerra();//atores
+	C2D2M_Encerra(); //mapas
+	C2D2_Encerra();//chien
 }
 
 

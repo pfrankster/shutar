@@ -16,7 +16,7 @@ public:
 	Shutar();
 	~Shutar();
 	void Run();
-	int GameState = 1;
+	int GameState = 2;
 
 	void GameLoop();
 	void Setup();

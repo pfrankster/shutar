@@ -13,7 +13,8 @@
 // Enumeração dos estados da atriz do jogo
 enum {
 	NAVE_PARADA = ATOR_PROG_INI, 
-	NAVE_DESLOCANDO
+	NAVE_DESLOCANDO,
+	NAVE_ESTABILIZANDO
 };
 
 // A função que carrega o personagem atriz (pra facilitar).
