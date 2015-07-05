@@ -7,10 +7,7 @@
 
 #include "AtorManager.h"
 #include "Nave.h"
-
-#define LARGURA_TELA 1024
-#define ALTURA_TELA 578
-
+#include "Tiro.h"
 
 unsigned int musicas[3];
 unsigned int logoPUC, jogorolando, mouseTX;
@@ -20,7 +17,8 @@ unsigned int mapa;
 int mousePosX, mousePosY;
 
 bool tocandomusica = false; 
-
+bool shootOK;
+unsigned int shootType = 1; 
 
 //Personagens do jogo
 Ator *nave;
@@ -65,6 +63,7 @@ void Shutar::Setup()
 
 	//carrega atores do jogo
 	bool cnave = Nave_Carrega(); 
+	bool ctiro = Tiro_Carrega();
 
 	//carrega mapa
 	mapa = C2D2M_CarregaMapaMappy("mapa4.FMP", "sheetstar01.png");
@@ -89,6 +88,8 @@ void Shutar::Setup()
 		//nave = ATOR_CriaAtor(NAVE, xinit, yinit, 0);
 	}
 	
+	if (ctiro)
+		shootOK = false; 
 
 }
 
@@ -114,8 +115,56 @@ void Shutar::Update(int gamestate)
 		mousePosY = mouse->y;
 
 		Nave_ProcessaControle(nave);
-			ATOR_AplicaEstado(nave, 0, LARGURA_TELA, ALTURA_TELA);
-			Nave_Atualiza(nave, 0);
+			ATOR_AplicaEstado(nave, mapa, LARGURA_TELA, ALTURA_TELA);
+			Nave_Atualiza(nave, mapa);
+
+
+			if (shootOK)
+			{
+				ATOR_AplicaEstado(tiro, mapa, LARGURA_TELA, ALTURA_TELA);
+				Tiro_Atualiza(tiro, mapa);
+			}
+
+
+		//eventos diretos da chien para o jogo 
+			Evento ev;
+
+			while (ATOR_ProximoEventoJogo(&ev))
+			{
+				switch (ev.tipoEvento)
+				{
+
+				case	EVT_PRESSIONOU_BAIXO:
+					shootOK = false;
+					break;
+
+				case EVT_CRIA_PERSONAGEM:
+					switch (ev.subtipo)
+					{
+					case TIRO_NAVE:
+						// Se o tiro é nulo, pode criar um novo
+						if (!shootOK)
+						{
+							printf("atirou!\n");
+							tiro = ATOR_CriaAtor(TIRO_NAVE, ev.x, ev.y, ev.valor);
+							//tiro = ATOR_CriaAtor(TIRO_NAVE, 0, 0, ev.valor);
+							ATOR_TocaEfeitoTela(nave, 0, mapa);
+							shootOK = true;
+						}
+
+						break;
+
+					case REDBOSS:
+						// Se o tiro é nulo, pode criar um novo
+						if (redboss == 0)
+							redboss = ATOR_CriaAtor(REDBOSS, ev.x, ev.y, ev.valor);
+						break;
+
+
+					}
+					break;
+				}
+			}
 	}
 
 
@@ -147,8 +196,11 @@ void Shutar::Draw()
 
 		
 		ATOR_CentraMapa(nave, mapa, LARGURA_TELA, ALTURA_TELA);
-
+		
 		ATOR_Desenha(nave, mapa, 0, 0);
+		if (shootOK)
+			ATOR_Desenha(tiro, mapa, 0, 0);
+
 
 		C2D2_DesenhaSprite(mouseTX, 0, mousePosX, mousePosY);
 		break;
@@ -217,6 +269,9 @@ void Shutar::GameLoop()
 void Shutar::Dispose()
 {
 	//Tudo que for iniciado precisar ser encerrado ... JANELA ATORES SONS ETC 
+	ATOR_DescarregaAtor(NAVE);
+	ATOR_DescarregaAtor(TIRO_NAVE);
+
 	CA2_Encerra(); //audio
 	ATOR_Encerra();//atores
 	C2D2M_Encerra(); //mapas

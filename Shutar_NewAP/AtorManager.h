@@ -2,7 +2,7 @@
 
 
 //TIPOS DE ATORES QUE FARAO PARTE DO JOGO
-enum { NAVE, OCORRENCIA, REDBOSS, TIRO_NAVE };
+enum { NAVE, TIRO_NAVE, OCORRENCIA, REDBOSS };
 
 
 //Lista de marcas personalizadas na sheet 

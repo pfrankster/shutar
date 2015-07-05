@@ -1,28 +1,26 @@
 #pragma once
 
 
+#define LARGURA_TELA 1024
+#define ALTURA_TELA 578
+
 
 class Shutar
 {
-	/*Estados Possíveis 
-		1 - Splash
-		2 - Menu
-		3 - Game
-		4 - GameOver
-
-	*/
 
 public:
 	Shutar();
 	~Shutar();
 	void Run();
-	int GameState = 2;
 
 	void GameLoop();
 	void Setup();
 	void Update(int gamestate);
 	void Draw();
 	void Dispose();
+
+	int GameState = 2; 	/*Estados Possíveis  	1 - Splash  		2 - Menu		3 - Game		4 - GameOver	*/
+
 
 };
 

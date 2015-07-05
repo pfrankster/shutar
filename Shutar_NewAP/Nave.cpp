@@ -16,7 +16,7 @@ Animacao animaNave[] = {
 	// Vetor com a nave L2 DESLOCANDO
 	{ 5, 3, { 5, 6, 7, 6, 5 } },
 	// Vetor com a nave L2 ESTABILIZANDO
-	{ 12, 8, { 8, 9, 4, 10, 8, 4, 11, 9, 10, 4, 9, 8 } }
+	{ 12, 16, { 8, 9, 4, 10, 8, 4, 11, 9, 10, 4, 9, 8 } }
 
 };
 
@@ -50,7 +50,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		
 		
 		
-		a->temporizadores[0] = 1;
+		a->temporizadores[0] = 1; //??
 		break;
 
 	case NAVE_PARADA:
@@ -406,8 +406,8 @@ void Nave_ProcessaControle(Ator *a)
 	
 	if (teclado[C2D2_1].pressionado)
 	{
-		tiroType = 1;
-		VTIRO = 6;
+		tiroType = 1; //substituir
+		VTIRO = 6; //substituir 
 	}
 	if (teclado[C2D2_2].pressionado)
 	{
@@ -457,8 +457,8 @@ void Nave_ProcessaControle(Ator *a)
 
 	if (mouse->botoes[1].liberado)
 	{
-			ev.tipoEvento = EVT_LIBEROU_BOTAO2;
-		ATOR_EnviaEvento(a, &ev);
+		//	ev.tipoEvento = EVT_LIBEROU_BOTAO2;
+		//ATOR_EnviaEvento(a, &ev);
 		
 	}
 

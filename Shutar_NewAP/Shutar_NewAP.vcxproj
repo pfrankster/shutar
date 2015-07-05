@@ -85,11 +85,13 @@
     <ClCompile Include="Nave.cpp" />
     <ClCompile Include="Shutar.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tiro.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtorManager.h" />
     <ClInclude Include="Nave.h" />
     <ClInclude Include="Shutar.h" />
+    <ClInclude Include="Tiro.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
