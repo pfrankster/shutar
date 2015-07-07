@@ -48,13 +48,16 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		// Muda o temporizador para criar o tiro
 		// A escolha da posição 0 no vetor é arbitrária
 		
-		
+		a->aux_int[3] = 1000; 
 		
 		a->temporizadores[0] = 1; //??
 		break;
 
 	case NAVE_PARADA:
 		a->velocidade = VNAVE - 1;
+		if (a->aux_int[3] < 1000)
+		a->aux_int[3]++;
+		
 		if (a->estado.subestado == ESTADO_INICIO)
 		{
 
@@ -110,7 +113,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				//a->velocidade = VNAVE;
 				// Muda o estado
 				ATOR_TrocaEstado(a, NAVE_DESLOCANDO, false);
-
+				if (a->aux_int[3] > 0)
+					a->aux_int[3]--;
 				break;
 
 			case EVT_PRESSIONOU_BOTAO2:
@@ -121,7 +125,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 			case EVT_LIBEROU_BOTAO2:
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
-				a->velocidade = 0;
+				a->velocidade =		VNAVE - 1;
 				break;
 
 
@@ -135,7 +139,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 				ev.valor = (int)a->olhandoPara;
 				ATOR_EnviaEventoJogo(&ev);
-
+    
+				a->aux_int[3] -= 50; //reduz energia ao atirar 
 
 				break;
 
@@ -215,18 +220,20 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				//a->velocidade = VNAVE;
 				// Muda o estado
 				ATOR_TrocaEstado(a, NAVE_DESLOCANDO, false);
+				if (a->aux_int[3] > 0)
+					a->aux_int[3]--;
 
 				break;
 
 			case EVT_PRESSIONOU_BOTAO2:
 				a->velocidade = 0;
 				ATOR_TrocaEstado(a, NAVE_ESTABILIZANDO, false);
-
+				a->aux_int[3] -= .5f;
 				break;
 
 			case EVT_LIBEROU_BOTAO2:
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
-				//a->velocidade = 0;
+				a->velocidade = VNAVE - 1;
 				break;
 
 
@@ -309,6 +316,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 				a->direcao = a->olhandoPara;
 				a->velocidade = VNAVE;
+				if (a->aux_int[3] > 0)
+					a->aux_int[3]--;
 
 				break;
 
@@ -331,6 +340,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 			case EVT_LIBEROU_BOTAO2:
 
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
+				a->velocidade = VNAVE - 1;
 
 				break;
 
@@ -448,7 +458,7 @@ void Nave_ProcessaControle(Ator *a)
 	}
 
 	/*freio nave */
-	if (mouse->botoes[1].ativo)
+	if (mouse->botoes[1].pressionado)
 	{
 		ev.tipoEvento = EVT_PRESSIONOU_BOTAO2;
 		ATOR_EnviaEvento(a, &ev);
@@ -457,8 +467,8 @@ void Nave_ProcessaControle(Ator *a)
 
 	if (mouse->botoes[1].liberado)
 	{
-		//	ev.tipoEvento = EVT_LIBEROU_BOTAO2;
-		//ATOR_EnviaEvento(a, &ev);
+			ev.tipoEvento = EVT_LIBEROU_BOTAO2;
+		ATOR_EnviaEvento(a, &ev);
 		
 	}
 
@@ -468,14 +478,9 @@ void Nave_ProcessaControle(Ator *a)
 	int x1 = 0;
 	int y1 = 0;
 	C2D2M_PosicaoXY(1, &x1, &y1);
-
 	ev.tipoEvento = EVT_POSICAO;
 	ev.x = x1 + mouse->x + 12;
 	ev.y = y1 + mouse->y + 12;
-
-	//ev.x = x1 + mouse->x;
-	//ev.y = y1 + mouse->y;
-
 	ATOR_EnviaEvento(a, &ev);
 
 

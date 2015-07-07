@@ -9,21 +9,22 @@
 Animacao animaTiro[] = {
 	// Ordem: número de quadros, tempo entre os quadros, vetor com a seqüência de quadros
 
-	{ 1, 4, { 1 } },
+	{ 1, 4, { 0 } },
 	{ 1, 4, { 2 } },
 	{ 1, 4, { 3 } },
 	{ 1, 4, { 4 } }
 
 };
 
-//char *sons[] = { "laser1.ogg", "propulsao.ogg" };
 
 
 // A função que carrega o Player
 //
 bool Tiro_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(TIRO_NAVE, "shoots.png", 96, 96, 21, 12, 6, 22, animaTiro, true, 0, 0, &Tiro_Atualiza);
+	//return ATOR_CarregaAtorEstatico(TIRO_NAVE, "shoots.png", 96, 96, 21, 12, 6, 22, animaTiro, true, 0, 0, &Tiro_Atualiza);
+	return ATOR_CarregaAtorEstatico(TIRO_NAVE, "singleshoot.png", 22, 6, 0, 0, 22, 6, animaTiro, true, 0, 0, &Tiro_Atualiza);
+
 }
 
 // A função para fazer a lógica do Tiro
@@ -55,32 +56,7 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 	{
 		if (a->estado.subestado == ESTADO_INICIO)
 		{
-			// coloca a animação da nave parada
-			/*
-				switch (shootType)
-				{
-				case 1:
-					ATOR_TrocaAnimacao(a, 0);
-					break;
-				case 2:
-					ATOR_TrocaAnimacao(a, 1);
-					a->velocidade = VTIRO + 3;
-					break;
-
-				case 3:
-					ATOR_TrocaAnimacao(a, 2);
-					a->velocidade = VTIRO + 6;
-					break;
-
-				case 4:
-					ATOR_TrocaAnimacao(a, 3);
-					a->velocidade = VTIRO + 9;
-					break;
-
-				}
-			*/
-			ATOR_TrocaAnimacao(a, 1);
-
+			ATOR_TrocaAnimacao(a, 0);
 
 			// Troca o sub-estado
 			a->estado.subestado = ESTADO_RODANDO;
@@ -122,6 +98,7 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 
 			}
 		}
+
 		break;
 	}
 	case ATOR_ENCERRADO:
@@ -131,8 +108,5 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 	}
 	return true;
 }
-
-
-
 
 

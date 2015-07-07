@@ -30,6 +30,18 @@
     <ClCompile Include="Tiro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RedBoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniRed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BatRobo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ocorrencia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shutar.h">
@@ -42,6 +54,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tiro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RedBoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniRed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BatRobo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ocorrencia.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
