@@ -9,8 +9,12 @@
 #include "AtorManager.h"
 #include "Nave.h"
 #include "Tiro.h"
+#include "TiroInimigo.h"
+
 #include "RedBoss.h"
 #include "MiniRed.h"
+#include "MiniShooter.h"
+
 #include "BatRobo.h"
 #include "Ocorrencia.h"
 
@@ -23,16 +27,19 @@ int mousePosX, mousePosY;
 
 int energytank = 100;
 
+int indO = 0;
 
 int numOcorrencias = 0;  
 int numinimigosBT = 0;
 int numinimigosMR = 0;
+int numinimigosSH = 0;
 int numinimigosRB = 0;
 
 int fuel = 100; 
 bool tocandomusica = false; 
 bool shootOK;
 unsigned int shootType = 1; 
+
 
 //Personagens do jogo
 Ator *nave;
@@ -41,12 +48,14 @@ Ator *tiro;//tironave
 
 Ator **inimigos; //bats
 Ator **inimigosMR;//minired
+Ator **inimigosSH;//minired
 Ator **ocorrencias;//alertas
 Ator **inimigosRB; //redBoss
 Ator *redboss;
 Ator *minired;
 Ator *batrobo;
 Ator *ocorrencia; 
+Ator *miniredAgenger;
 
 
 
@@ -95,6 +104,12 @@ void Shutar::Setup()
 	bool cminired = MiniRed_Carrega();
 	bool cbatrobo = BatRobo_Carrega();
 	bool cocorrencia = Ocorrencia_Carrega();
+	bool cmrAvenger = MiniRed_Carrega(); 
+
+//inimigo MiniShooter
+	bool cminishooter = MiniShooter_Carrega();
+	bool ctiroInimigo = TiroInimigo_Carrega();
+
 
 
 	//carrega mapa
@@ -170,6 +185,7 @@ void Shutar::Setup()
 		shootOK = false;
 	}
 
+
 	if (credboss)
 	{
 
@@ -189,6 +205,12 @@ void Shutar::Setup()
 	}
 		//redboss = ATOR_CriaAtor(REDBOSS, -5, 5, 0);
 
+	if (cmrAvenger)
+	{
+
+		miniredAgenger = 0; 
+	}
+
 	if (cminired)
 	{
 
@@ -197,7 +219,7 @@ void Shutar::Setup()
 
 		//posicao temporaria para referencia
 		int xini, yini = 0;
-		int indO = 0;
+		/*int indO = 0;*/
 
 		if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGOS_MINIRED, &xini, &yini))
 		{
@@ -280,7 +302,7 @@ void Shutar::Update(int gamestate)
 			{
 				Evento evt;
 				evt.tipoEvento = EVT_POSICAO;
-				evt.x = posXNave ;
+				evt.x = posXNave;
 				evt.y = posYNave;
 				ATOR_EnviaEvento(inimigosMR[i], &evt);
 			//printf("passou coordenada");
@@ -362,39 +384,9 @@ void Shutar::Update(int gamestate)
 				ATOR_Atualiza(ocorrencias[i], mapa);
 			}
 
+			CollisionHandler(); 
 
-
-			if (shootOK)
-			{
-				ATOR_AplicaEstado(tiro, mapa, LARGURA_TELA, ALTURA_TELA);
-				Tiro_Atualiza(tiro, mapa);
-
-			}
-			//checa colisao com bats 
-			for (int i = 0; i < numinimigosBT; i++)
-			{
-				if (ATOR_ColidiuAtores(tiro, inimigos[i]))
-				{
-					Evento ev;
-					ATOR_EnviaEvento(inimigos[i], &ev);
-					printf("\nacertou");
-				}
-
-			}
-
-			//checa colisao com minireds
-			for (int i = 0; i < numinimigosMR; i++)
-			{
-				if (ATOR_ColidiuAtores(tiro, inimigosMR[i]))
-				{
-					Evento ev;
-					ATOR_EnviaEvento(inimigosMR[i], &ev);
-					printf("\nacertou");
-				}
-
-			}
-
-
+			
 		//eventos diretos da chien para o jogo 
 			Evento ev;
 
@@ -427,6 +419,13 @@ void Shutar::Update(int gamestate)
 							// Se o tiro é nulo, pode criar um novo
 							if (redboss == 0)
 								redboss = ATOR_CriaAtor(REDBOSS, ev.x, ev.y, ev.valor);
+							break;
+
+						case MINIRED:
+							// Se o tiro é nulo, pode criar um novo
+							printf("\ngerador recebeu a info e vai gerar um MiniRED");
+							miniredAgenger = ATOR_CriaAtor(MINIRED, ev.x, ev.y, ev.valor);
+					
 							break;
 
 
@@ -563,6 +562,7 @@ void Shutar::GameLoop()
 			case 1:
 				CA2_AjustaVolume(25,-1);
 				CA2_TocaMusica(GameState, -1);
+				
 				tocandomusica = true;
 				break;
 			case 2:
@@ -586,6 +586,68 @@ void Shutar::GameLoop()
 
 		C2D2_Sincroniza(C2D2_FPS_PADRAO);
 	}
+}
+
+
+void Shutar::CollisionHandler(){
+
+	//trata das colisoes do tiro
+	if (shootOK)
+	{
+		ATOR_AplicaEstado(tiro, mapa, LARGURA_TELA, ALTURA_TELA);
+		Tiro_Atualiza(tiro, mapa);
+
+
+		//checa colisao com bats 
+		for (int i = 0; i < numinimigosBT; i++)
+		{
+			if (ATOR_ColidiuAtores(tiro, inimigos[i]))
+			{
+				Evento ev;
+				ATOR_EnviaEvento(inimigos[i], &ev);
+				printf("\nacertou um bat");
+			}
+
+		}
+
+		//checa colisao com minireds
+		for (int i = 0; i < numinimigosMR; i++)
+		{
+			if (ATOR_ColidiuAtores(tiro, inimigosMR[i]))
+			{
+				Evento ev;
+				ATOR_EnviaEvento(inimigosMR[i], &ev);
+				printf("\nacertou um mini");
+			}
+
+		}
+
+		//checa colisao tiro reboss 
+		for (int i = 0; i < numinimigosRB; i++)
+		{
+			if (ATOR_ColidiuAtores(tiro, inimigosRB[i]))
+			{
+				Evento ev;
+				ATOR_EnviaEvento(inimigosRB[i], &ev);
+				printf("\nacertou um redboss");
+			}
+
+		}
+
+	}//fim if tiro
+
+
+	//CONFERE SE NAVE ESTA SOB AREAS DE REPARO
+	for (int i = 0; i < numOcorrencias; i++)
+	{
+		if (ATOR_ColidiuAtores(nave, ocorrencias[i]))
+		{
+			Evento ev;
+			nave->aux_int[3] += 150; 
+		}
+	}
+
+
 }
 
 

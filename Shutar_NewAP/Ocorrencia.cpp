@@ -19,7 +19,7 @@ Animacao animaOcorrencia[] = {
 //
 bool Ocorrencia_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(OCORRENCIA, "bo_sheet.png", 96, 96, 0, 0, 96, 96, animaOcorrencia, true, 0, 0, &Ocorrencia_Atualiza);
+	return ATOR_CarregaAtorEstatico(OCORRENCIA, "bo_sheet.png", 96, 96, 36, 36, 12, 12, animaOcorrencia, true, 0, 0, &Ocorrencia_Atualiza);
 }
 
 // A função para fazer a lógica do Tiro

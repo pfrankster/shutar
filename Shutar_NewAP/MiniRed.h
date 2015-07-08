@@ -12,7 +12,7 @@
 
 // Enumeração dos estados da atriz do jogo
 enum {
-	MINIRED_PARADO = ATOR_PROG_INI
+	MINIRED_PARADO = ATOR_PROG_INI, MINIRED_DESLOCANDO
 };
 
 // A função que carrega o personagem atriz (pra facilitar).

@@ -34,10 +34,41 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, MINIRED_PARADO, false);
 		break;
-
 	case MINIRED_PARADO:
+
+		a->velocidade = 0; 
+
+		while (ATOR_ProximoEvento(a, &ev))
+		{
+		case EVT_POSICAO:
+			//if ((unsigned int)(ev.y - a->y) < 250 && (unsigned int)(ev.x - a->x) < 250
+
+			if (
+
+
+				(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) < 250 ||
+
+				(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) *-1 < 250 ||
+
+				(unsigned int)(a->y - ev.y) *-1 < 250 && (unsigned int)(a->x - ev.x) *-1< 250 ||
+
+				(unsigned int)(a->y - ev.y) *-1< 250 && (unsigned int)(a->x - ev.x) < 250
+
+				)
+			{
+				ATOR_TrocaEstado(a, MINIRED_DESLOCANDO, false);
+			}
+
+			break;
+
+		}
+		break;
+
+	case MINIRED_DESLOCANDO:
 	{
+
 		Evento ev;
+
 		if (a->estado.subestado == ESTADO_INICIO)
 		{		// coloca a animação da nave parada
 				ATOR_TrocaAnimacao(a, 0);
@@ -47,7 +78,7 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 		
 		}
 
-		a->velocidade = 0.7f;
+		a->velocidade = 4.4f;
 
 
 			while (ATOR_ProximoEvento(a, &ev))
@@ -62,7 +93,23 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 				case EVT_POSICAO:
 				{
-					
+					if (
+						
+						(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) > 250 ||
+
+						(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
+
+						(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
+
+						(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) > 250
+
+						)
+
+					{
+						ATOR_TrocaEstado(a, MINIRED_PARADO, false);
+					}
+
+
 
 					// Muda a diração na qual o personagem está olhando
 					// Calcula o cateto adjacente e oposto

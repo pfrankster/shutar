@@ -84,22 +84,26 @@
     <ClCompile Include="AtorManager.cpp" />
     <ClCompile Include="BatRobo.cpp" />
     <ClCompile Include="MiniRed.cpp" />
+    <ClCompile Include="MiniShooter.cpp" />
     <ClCompile Include="Nave.cpp" />
     <ClCompile Include="Ocorrencia.cpp" />
     <ClCompile Include="RedBoss.cpp" />
     <ClCompile Include="Shutar.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tiro.cpp" />
+    <ClCompile Include="TiroInimigo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtorManager.h" />
     <ClInclude Include="BatRobo.h" />
     <ClInclude Include="MiniRed.h" />
+    <ClInclude Include="MiniShooter.h" />
     <ClInclude Include="Nave.h" />
     <ClInclude Include="Ocorrencia.h" />
     <ClInclude Include="RedBoss.h" />
     <ClInclude Include="Shutar.h" />
     <ClInclude Include="Tiro.h" />
+    <ClInclude Include="TiroInimigo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

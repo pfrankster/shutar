@@ -18,7 +18,7 @@ Animacao animaRedBoss[] = {
 //
 bool RedBoss_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(REDBOSS, "sheet_redboss.png", 384, 480, 96, 48, 288, 190, animaRedBoss, true, 0, 0, &RedBoss_Atualiza);
+	return ATOR_CarregaAtorEstatico(REDBOSS, "sheet_redboss.png", 480, 384, 96, 48, 190, 288, animaRedBoss, true, 0, 0, &RedBoss_Atualiza);
 }
 
 // A função para fazer a lógica do Tiro
@@ -58,12 +58,20 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 			case EVT_COLIDIU_PERSONAGEM:
 				if (ev.subtipo == TIRO_NAVE)
 				{
-					if(a->vidas > 0)
-						a->vidas--;
-					else
-						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+					printf("\ncolisao com redboos ... gerando mini");
+					ev.tipoEvento = EVT_CRIA_PERSONAGEM;
+					ev.subtipo = MINIRED;
+					ev.x = a->x;
+					ev.y = a->y;
+
+					ATOR_EnviaEventoJogo(&ev); 
+
 				}
-					break;
+				
+				if (a->vidas <0)
+					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				
+				break;
 		
 				// Caso tenha movido o mouse
 				case EVT_POSICAO:

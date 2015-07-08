@@ -42,6 +42,12 @@
     <ClCompile Include="Ocorrencia.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TiroInimigo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniShooter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shutar.h">
@@ -66,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ocorrencia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniShooter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TiroInimigo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

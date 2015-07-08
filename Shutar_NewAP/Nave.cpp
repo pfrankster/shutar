@@ -112,9 +112,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				a->direcao = a->olhandoPara;
 				//a->velocidade = VNAVE;
 				// Muda o estado
-				ATOR_TrocaEstado(a, NAVE_DESLOCANDO, false);
-				if (a->aux_int[3] > 0)
-					a->aux_int[3]--;
+					ATOR_TrocaEstado(a, NAVE_DESLOCANDO, false);
+
 				break;
 
 			case EVT_PRESSIONOU_BOTAO2:
@@ -125,7 +124,6 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 			case EVT_LIBEROU_BOTAO2:
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
-				a->velocidade =		VNAVE - 1;
 				break;
 
 
@@ -438,8 +436,17 @@ void Nave_ProcessaControle(Ator *a)
 
 	if (teclado[C2D2_ESPACO].ativo)
 	{
-		ev.tipoEvento = EVT_PRESSIONOU_BOTAO1;
-		ATOR_EnviaEvento(a, &ev);
+		if (a->aux_int[3] > 100 )
+		{
+			ev.tipoEvento = EVT_PRESSIONOU_BOTAO1;
+			ATOR_EnviaEvento(a, &ev);
+		}
+		else{
+			ev.tipoEvento = EVT_LIBEROU_BOTAO1;
+			ATOR_EnviaEvento(a, &ev);
+
+		}
+
 	}
 
 	if (teclado[C2D2_ESPACO].liberado)
@@ -453,8 +460,11 @@ void Nave_ProcessaControle(Ator *a)
 	//GERA TIRO 
 	if (mouse->botoes[0].pressionado)
 	{
-		ev.tipoEvento = EVT_PRESSIONOU_BOTAO3;
-		ATOR_EnviaEvento(a, &ev);
+		if (a->aux_int[3] > 200)
+		{
+			ev.tipoEvento = EVT_PRESSIONOU_BOTAO3;
+			ATOR_EnviaEvento(a, &ev);
+		}
 	}
 
 	/*freio nave */
