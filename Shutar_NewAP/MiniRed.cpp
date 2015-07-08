@@ -47,7 +47,7 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 		
 		}
 
-		a->velocidade = 1.7f;
+		a->velocidade = 0.7f;
 
 
 			while (ATOR_ProximoEvento(a, &ev))

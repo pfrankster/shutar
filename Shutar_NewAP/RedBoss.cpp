@@ -18,7 +18,7 @@ Animacao animaRedBoss[] = {
 //
 bool RedBoss_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(REDBOSS, "sheet_redboss.png", 480, 384, 96, 48, 288, 190, animaRedBoss, true, 0, 0, &RedBoss_Atualiza);
+	return ATOR_CarregaAtorEstatico(REDBOSS, "sheet_redboss.png", 384, 480, 96, 48, 288, 190, animaRedBoss, true, 0, 0, &RedBoss_Atualiza);
 }
 
 // A função para fazer a lógica do Tiro
@@ -35,8 +35,7 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 	case ATOR_NASCENDO:
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, REDBOSS_PARADO, false);
-		a->velocidade = 0;
-		a->olhandoPara = 0;
+		a->velocidade = 0.2f;
 		
 		break;
 
@@ -56,8 +55,14 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 			{
 
 
-				case EVT_COLIDIU_PERSONAGEM:
-					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+			case EVT_COLIDIU_PERSONAGEM:
+				if (ev.subtipo == TIRO_NAVE)
+				{
+					if(a->vidas > 0)
+						a->vidas--;
+					else
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				}
 					break;
 		
 				// Caso tenha movido o mouse
@@ -93,8 +98,8 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 							angulo = 180 - angulo;
 					}
 
-					a->olhandoPara = angulo;
-
+					//a->olhandoPara = angulo;
+					a->direcao = angulo;
 
 					break;
 			}

@@ -61,7 +61,7 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 			// Troca o sub-estado
 			a->estado.subestado = ESTADO_RODANDO;
 			// O tiro existe por 1 segundo
-			a->temporizadores[0] = 30;
+			a->temporizadores[0] = 15;
 		}
 		// Enquanto houverem eventos
 		while (ATOR_ProximoEvento(a, &ev))

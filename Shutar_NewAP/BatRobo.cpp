@@ -36,6 +36,7 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 		// Usa valores auxiliares para guardar a posição inicial do tiro
 		a->aux_real[0] = a->x;
 		a->aux_real[1] = a->y;
+		a->velocidade = 0.2f; 
 		break;
 
 	case BATROBO_PARADO:
@@ -46,9 +47,10 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 			// Troca o sub-estado
 			a->estado.subestado = ESTADO_RODANDO;
 		}
+		
 
 			//a->olhandoPara = a->olhandoPara%360 +50;
-		a->olhandoPara = a->direcao;
+		//a->olhandoPara = a->direcao;
 			//a->temporizadores[0] = 100;
 
 			while (ATOR_ProximoEvento(a, &ev))
@@ -59,6 +61,45 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 					//if (ev.subtipo = TIRO_NAVE)
 						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
 					break;
+
+				case EVT_POSICAO:
+				{
+
+
+					// Muda a diração na qual o personagem está olhando
+					// Calcula o cateto adjacente e oposto
+					double ca = fabs(a->x - ev.x);
+					double co = fabs(a->y - ev.y);
+					double angulo = 90;
+					// Se o cateto oposto é zero, o angulo é 90º
+					// Senão, calcula
+					if (ca != 0)
+						angulo = atan(co / ca)*RAD_ANG;
+					// Ajusta o quadrante
+					// Primeiro e quarto quadrantes
+					if (ev.x>a->x)
+					{
+						// Está no quarto?
+						if (ev.y>a->y)
+							angulo = 360 - angulo;
+					}
+					// Segundo e terceiro quadrantes
+					else
+					{
+						// Terceiro quadrante
+						if (ev.y>a->y)
+							angulo += 180;
+						// Segundo quadrante
+						else
+							angulo = 180 - angulo;
+					}
+					a->olhandoPara = angulo;
+					a->direcao = a->olhandoPara;
+					break;
+				}
+
+
+
 				}
 			} //fim while eventos
 			

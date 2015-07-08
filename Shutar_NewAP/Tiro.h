@@ -3,7 +3,7 @@
 
 #include <c2d2/ator.h>
 
-#define VTIRO	5
+#define VTIRO	12
 
 
 //ALGUMAS PROPRIEDADES DA NAVE

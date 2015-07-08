@@ -25,8 +25,9 @@ int energytank = 100;
 
 
 int numOcorrencias = 0;  
-int numinimigosTipo1 = 0;
+int numinimigosBT = 0;
 int numinimigosMR = 0;
+int numinimigosRB = 0;
 
 int fuel = 100; 
 bool tocandomusica = false; 
@@ -35,13 +36,13 @@ unsigned int shootType = 1;
 
 //Personagens do jogo
 Ator *nave;
-Ator *tiro;
-Ator *prop;
+Ator *tiro;//tironave
+//Ator *prop;
 
-Ator **inimigos;
-Ator **inimigosMR;
-Ator **ocorrencias;
-
+Ator **inimigos; //bats
+Ator **inimigosMR;//minired
+Ator **ocorrencias;//alertas
+Ator **inimigosRB; //redBoss
 Ator *redboss;
 Ator *minired;
 Ator *batrobo;
@@ -97,7 +98,7 @@ void Shutar::Setup()
 
 
 	//carrega mapa
-	mapa = C2D2M_CarregaMapaMappy("mapa4.FMP", "sheetstar01.png");
+	mapa = C2D2M_CarregaMapaMappy("mapa5.FMP", "sheetstar01.png");
 	
 	int numcamadas = 4;
 	//define a marca inical dos tiles programados da chien
@@ -111,20 +112,18 @@ void Shutar::Setup()
 	int tpX = 0, tpY = 0; //apenas referencia para coord serem trazidas  
 
 	//PROCURA SABER NUMERO TOTAL DE INIMIGOS
-	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO, &tpX, &tpY))
+	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO_BT, &tpX, &tpY))
 	{
-		numinimigosTipo1++;
-		//numInimigos++;
+		numinimigosBT++;
 		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
-			//numInimigos++;
-			numinimigosTipo1++;
+			numinimigosBT++;
 	}
 
 	tpX = 0;
 	tpY = 0;
 
 	//PROCURA SABER NUMERO TOTAL DE INIMIGOS
-	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO, &tpX, &tpY))
+	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGOS_MINIRED, &tpX, &tpY))
 	{
 		numinimigosMR++;
 		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
@@ -141,6 +140,16 @@ void Shutar::Setup()
 		numOcorrencias++;
 		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
 			numOcorrencias++;
+	}
+
+	tpX = 0;
+	tpY = 0;
+
+	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_REDBOSS, &tpX, &tpY))
+	{
+		numinimigosRB++;
+		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
+			numinimigosRB++;
 	}
 
 
@@ -162,7 +171,23 @@ void Shutar::Setup()
 	}
 
 	if (credboss)
-		redboss = ATOR_CriaAtor(REDBOSS, -5, 5, 0);
+	{
+
+		inimigosRB = (Ator**)malloc(sizeof(Ator*)*numinimigosRB);
+		memset(inimigosRB, 0, numinimigosRB*sizeof(Ator*));
+
+		//posicao temporaria para referencia
+		int xini, yini = 0;
+		int indO = 0;
+
+		if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_REDBOSS, &xini, &yini))
+		{
+			inimigosRB[indO++] = ATOR_CriaAtor(REDBOSS, xini, yini, 0);
+			while (C2D2M_ProximoBlocoMarca(mapa, &xini, &yini))
+				inimigosRB[indO++] = ATOR_CriaAtor(REDBOSS, xini, yini, 0);
+		}
+	}
+		//redboss = ATOR_CriaAtor(REDBOSS, -5, 5, 0);
 
 	if (cminired)
 	{
@@ -187,14 +212,14 @@ void Shutar::Setup()
 		//batrobo = ATOR_CriaAtor(BATROBO, -5, 5, 0);
 	{
 
-		inimigos = (Ator**)malloc(sizeof(Ator*)*numinimigosTipo1);
-		memset(inimigos, 0, numinimigosTipo1*sizeof(Ator*));
+		inimigos = (Ator**)malloc(sizeof(Ator*)*numinimigosBT);
+		memset(inimigos, 0, numinimigosBT*sizeof(Ator*));
 
 		//posicao temporaria para referencia
 		int xini, yini = 0;
 		int indO = 0;
 
-		if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO, &xini, &yini))
+		if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO_BT, &xini, &yini))
 		{
 			inimigos[indO++] = ATOR_CriaAtor(BATROBO, xini, yini, 0);
 			while (C2D2M_ProximoBlocoMarca(mapa, &xini, &yini))
@@ -246,19 +271,44 @@ void Shutar::Update(int gamestate)
 		mousePosX = mouse->x;
 		mousePosY = mouse->y;
 
-		//REPASSA A POSICAO DA NAVE PARA O REDBOSS *-*-*-*-*-*
-		if (minired)
-		{
-			for (int i = 0; i > numinimigosMR; i++)
+		//REPASSA A POSICAO DA NAVE PARA TODOS OS INIMIGOS *-*-*-*-*-*
+		int posXNave, posYNave;
+		posXNave = nave->x;
+		posYNave = nave->y;
+
+			for (int i = 0; i < numinimigosMR; i++)
 			{
 				Evento evt;
 				evt.tipoEvento = EVT_POSICAO;
-				evt.x = mouse->x ;
-				evt.y = mouse->y;
+				evt.x = posXNave ;
+				evt.y = posYNave;
 				ATOR_EnviaEvento(inimigosMR[i], &evt);
 			//printf("passou coordenada");
 			}
-		}
+
+			for (int i = 0; i < numinimigosBT; i++)
+			{
+				Evento evt;
+				evt.tipoEvento = EVT_POSICAO;
+				evt.x = posXNave;
+				evt.y = posYNave;
+				ATOR_EnviaEvento(inimigos[i], &evt);
+				//printf("passou coordenada");
+			}
+
+
+			for (int i = 0; i < numinimigosRB; i++)
+			{
+				Evento evt;
+				evt.tipoEvento = EVT_POSICAO;
+				evt.x = posXNave;
+				evt.y = posYNave;
+				ATOR_EnviaEvento(inimigosRB[i], &evt);
+				//printf("passou coordenada");
+			}
+
+
+
 
 		 //-*-*--*-*-*-*-*-*-*-*-*-*-*-*-
 
@@ -269,8 +319,8 @@ void Shutar::Update(int gamestate)
 			Nave_Atualiza(nave, mapa);
 
 			//atualiza redboss
-			ATOR_AplicaEstado(redboss, mapa, LARGURA_TELA, ALTURA_TELA);
-			RedBoss_Atualiza(redboss, mapa);
+			/*ATOR_AplicaEstado(redboss, mapa, LARGURA_TELA, ALTURA_TELA);
+			RedBoss_Atualiza(redboss, mapa);*/
 
 			////atualiza minired
 			//ATOR_AplicaEstado(minired, mapa, LARGURA_TELA, ALTURA_TELA);
@@ -278,12 +328,21 @@ void Shutar::Update(int gamestate)
 
 
 			// atualiza  as inimigos 
-			for (int i = 0; i < numinimigosTipo1; i++)
+			for (int i = 0; i < numinimigosRB; i++)
+		{	
+				ATOR_AplicaEstado(inimigosRB[i], mapa, LARGURA_TELA, ALTURA_TELA);
+				// Aplica o estado da propulsao
+				ATOR_Atualiza(inimigosRB[i], mapa);
+			}
+
+			// atualiza  as inimigos 
+			for (int i = 0; i < numinimigosBT; i++)
 			{
 				ATOR_AplicaEstado(inimigos[i], mapa, LARGURA_TELA, ALTURA_TELA);
 				// Aplica o estado da propulsao
 				ATOR_Atualiza(inimigos[i], mapa);
 			}
+
 
 
 			// atualiza  as inimigos 
@@ -312,7 +371,7 @@ void Shutar::Update(int gamestate)
 
 			}
 			//checa colisao com bats 
-			for (int i = 0; i < numinimigosTipo1; i++)
+			for (int i = 0; i < numinimigosBT; i++)
 			{
 				if (ATOR_ColidiuAtores(tiro, inimigos[i]))
 				{
@@ -409,7 +468,7 @@ void Shutar::Draw()
 
 		ATOR_CentraMapa(nave, mapa, LARGURA_TELA, ALTURA_TELA);
 
-		ATOR_Desenha(redboss, mapa, 4760, 5760);
+		//ATOR_Desenha(redboss, mapa, 4760, 5760);
 		//ATOR_Desenha(minired, mapa, 5960, 5760);
 		//ATOR_Desenha(batrobo, mapa, 6160, 5760);
 
@@ -422,9 +481,15 @@ void Shutar::Draw()
 		}
 
 		// Aplica as inimigos 
-		for (int i = 0; i < numinimigosTipo1; i++)
+		for (int i = 0; i < numinimigosBT; i++)
 		{
 			ATOR_Desenha(inimigos[i], mapa, 0, 0);
+		}
+
+		// Aplica as inimigos MR
+		for (int i = 0; i < numinimigosRB; i++)
+		{
+			ATOR_Desenha(inimigosRB[i], mapa, 0, 0);
 
 		}
 
