@@ -246,7 +246,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				ev.valor = (int)a->olhandoPara;
 				ATOR_EnviaEventoJogo(&ev);
 
-
+				a->aux_int[3] -= 50;
 				break;
 
 				/**********************ACHOU CHECKPOINTS **************************************************/
@@ -293,6 +293,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				ev.y = a->y;
 				ev.valor = (int)a->olhandoPara;
 				ATOR_EnviaEventoJogo(&ev);
+
+				a->aux_int[3] -= 50;
 				//a->temporizadores[0] = 30;
 				break;
 				/***********************************************************************************************/

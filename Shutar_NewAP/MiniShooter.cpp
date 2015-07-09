@@ -17,7 +17,7 @@ enum { TIRO_DESLOCANDO = ATOR_PROG_INI };
 // A distância máxima que um tiro pode percorrer
 #define MAX_DTIRO	600
 // A velocidade de um tiro
-#define VTIRO		10
+#define VTIRO		5
 
 
 // A função que carrega o Player
@@ -40,7 +40,7 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 	case ATOR_NASCENDO:
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, MINISHOOTER_PARADO, false);
-		a->temporizadores[1] = 30;
+		a->temporizadores[0] = 15;
 		break;
 
 	case MINISHOOTER_PARADO:
@@ -55,7 +55,7 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 
 		}
 
-		a->velocidade = 1.1f;
+		a->velocidade = 2.1f;
 
 
 		while (ATOR_ProximoEvento(a, &ev))
@@ -104,15 +104,18 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 				break;
 			}
 			case EVT_TEMPO:
-				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
-				ev.subtipo = TIRO_INIMIGO;
-				ev.x = a->x;
-				ev.y = a->y;
-				ev.valor = a->olhandoPara;
-				ATOR_EnviaEventoJogo(&ev);
-				a->temporizadores[1] = 120;
+				if (ev.subtipo == 0)
+				{
+					ev.tipoEvento = EVT_CRIA_PERSONAGEM;
+					ev.subtipo = TIRO_INIMIGO;
+					ev.x = a->x;
+					ev.y = a->y;
+					ev.valor = a->olhandoPara;
+					ATOR_EnviaEventoJogo(&ev);
+					a->temporizadores[0] = 120;
+				}
 				
-				printf("\nMR ATIRANDO");
+				printf("\nMS ATIRANDO");
 				break;
 			
 

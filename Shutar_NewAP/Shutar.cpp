@@ -425,6 +425,21 @@ void Shutar::Update(int gamestate)
 
 
 
+
+			for (int i = 0; i < numTirosInimigos; i++){
+				if (tirosInimigos[i] != 0)
+					ATOR_AplicaEstado(tirosInimigos[i], mapa, LARGURA_TELA, ALTURA_TELA);
+					ATOR_Atualiza(tirosInimigos[i], mapa);
+				
+
+					if (!ATOR_Atualiza(tirosInimigos[i], mapa))
+					{
+						free(tirosInimigos[i]);
+						tirosInimigos[i] = 0;
+					}
+			}
+
+
 			// atualiza  as inimigos 
 			for (int i = 0; i < numinimigosMR; i++)
 			{
@@ -466,7 +481,6 @@ void Shutar::Update(int gamestate)
 							{
 								printf("atirou!\n");
 								tiro = ATOR_CriaAtor(TIRO_NAVE, ev.x, ev.y, ev.valor);
-								//tiro = ATOR_CriaAtor(TIRO_NAVE, 0, 0, ev.valor);
 								ATOR_TocaEfeitoTela(nave, 0, mapa);
 								shootOK = true;
 							}
@@ -490,24 +504,18 @@ void Shutar::Update(int gamestate)
 						{
 							// Se o tiro é nulo, pode criar um novo
 
-							if (tirosInimigos[0] == 0)
+
+							for (int i = 0; i < numTirosInimigos; i++)
 							{
-							tirosInimigos[0] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
-							ATOR_TocaEfeitoTela(nave, 0, mapa);
-							}
+								if (tirosInimigos[i] == 0)
+								{
+									printf("atirou!\n");
+										tirosInimigos[i] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
+									ATOR_TocaEfeitoTela(nave, 0, mapa);
+									break;
 
-
-							//for (int i = 0; i < numTirosInimigos; i++)
-							//{
-							//	if (tirosInimigos[i] == 0)
-							//	{
-							//		printf("atirou!\n");
-							//			tirosInimigos[i] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
-							//		ATOR_TocaEfeitoTela(nave, 0, mapa);
-							//		
-
-							//	}
-							//} //fim for
+								}
+							} //fim for
 
 						}
 
@@ -537,7 +545,7 @@ void Shutar::Draw()
 		
 		break;
 	case 2:
-	{//Desenha Splash
+	{//Desenha GAME
 		//C2D2_DesenhaSprite(jogorolando, 0, 0, 0);
 
 		C2D2M_DesenhaCamadaMapa(mapa, 0, 0, 0, LARGURA_TELA, ALTURA_TELA); //desenha estrelas
@@ -549,10 +557,6 @@ void Shutar::Draw()
 
 
 		ATOR_CentraMapa(nave, mapa, LARGURA_TELA, ALTURA_TELA);
-
-		//ATOR_Desenha(redboss, mapa, 4760, 5760);
-		//ATOR_Desenha(minired, mapa, 5960, 5760);
-		//ATOR_Desenha(batrobo, mapa, 6160, 5760);
 
 
 		// Aplica as ocorrencias 
@@ -568,7 +572,7 @@ void Shutar::Draw()
 			ATOR_Desenha(inimigos[i], mapa, 0, 0);
 		}
 
-		// Aplica as inimigos MR
+		// Aplica as inimigos RB
 		for (int i = 0; i < numinimigosRB; i++)
 		{
 			ATOR_Desenha(inimigosRB[i], mapa, 0, 0);
@@ -587,6 +591,14 @@ void Shutar::Draw()
 		{
 			ATOR_Desenha(inimigosSH[i], mapa, 0, 0);
 
+		}
+
+
+		// Aplica as inimigos SH
+		for (int i = 0; i < numinimigosSH; i++)
+		{
+			if (tirosInimigos[i] != 0)
+				ATOR_Desenha(tirosInimigos[i], mapa, 0, 0);
 		}
 
 

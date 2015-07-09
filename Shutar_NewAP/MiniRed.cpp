@@ -53,13 +53,13 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 			case EVT_POSICAO:
 				if (
-					(a->y - ev.y) < 250 && (a->x - ev.x) < 250 ||
+					(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) < 250 ||
 
-					(a->y - ev.y) < 250 && (a->x - ev.x) *-1 < 250 ||
+					(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) *-1 < 250 ||
 
-					(a->y - ev.y) *-1 < 250 && (a->x - ev.x) *-1 < 250 ||
+					(unsigned int)(a->y - ev.y) *-1 < 250 && (unsigned int)(a->x - ev.x) *-1 < 250 ||
 
-					(a->y - ev.y) *-1 < 250 && (a->x - ev.x) < 250
+					(unsigned int)(a->y - ev.y) *-1 < 250 && (unsigned int)(a->x - ev.x) < 250
 					)
 				{
 					ATOR_TrocaEstado(a, MINIRED_DESLOCANDO, false);
@@ -83,15 +83,7 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 		Evento ev;
 
-		if (a->estado.subestado == ESTADO_INICIO)
-		{		// coloca a animação da nave parada
-			ATOR_TrocaAnimacao(a, 0);
-			// Troca o sub-estado
-			a->estado.subestado = ESTADO_RODANDO;
-			//a->direcao = a->olhandoPara;
-
-		}
-
+	
 		a->velocidade = .4f;
 
 
@@ -99,32 +91,18 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 		{
 			switch (ev.tipoEvento)
 			{
-
 				//EVENTOU COLISAO
 			case EVT_COLIDIU_PERSONAGEM:
-				printf("\nCHEGOU ATÉ AQUI!!!!!!!!!!!!!!");
+			{
+				if (ev.subtipo = TIRO_NAVE)
 				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
-
 				break;
+			}
 
 
 			case EVT_POSICAO:
 			{
-				if (
-
-					(a->y - ev.y) > 250 && (a->x - ev.x) > 250 ||
-
-					(a->y - ev.y) > 250 && (a->x - ev.x) *-1 > 250 ||
-
-					(a->y - ev.y) *-1 > 250 && (a->x - ev.x) *-1 > 250 ||
-
-					(a->y - ev.y) *-1 > 250 && (a->x - ev.x) > 250
-
-					)
-
-				{
-					ATOR_TrocaEstado(a, MINIRED_PARADO, false);
-				}
+				
 				
 				// Muda a diração na qual o personagem está olhando
 				// Calcula o cateto adjacente e oposto
@@ -161,8 +139,27 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 				}
 				a->olhandoPara = angulo;
 				a->direcao = a->olhandoPara;
+
+				if (
+
+					(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) > 250 ||
+
+					(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
+
+					(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
+
+					(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) > 250
+
+					)
+
+				{
+					ATOR_TrocaEstado(a, MINIRED_PARADO, false);
+				}
+
 				break;
 			}
+
+
 
 
 			}//fim switch
