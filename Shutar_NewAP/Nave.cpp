@@ -468,14 +468,19 @@ void Nave_ProcessaControle(Ator *a)
 	}
 
 	/*freio nave */
-	if (mouse->botoes[1].pressionado)
+	//if (mouse->botoes[1].pressionado)
+	if (teclado[C2D2_LSHIFT].pressionado)
+
+
 	{
 		ev.tipoEvento = EVT_PRESSIONOU_BOTAO2;
 		ATOR_EnviaEvento(a, &ev);
 
 	}
 
-	if (mouse->botoes[1].liberado)
+	//if (mouse->botoes[1].liberado)
+	if (teclado[C2D2_LSHIFT].liberado)
+
 	{
 			ev.tipoEvento = EVT_LIBEROU_BOTAO2;
 		ATOR_EnviaEvento(a, &ev);

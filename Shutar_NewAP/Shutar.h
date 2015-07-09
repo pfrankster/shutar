@@ -20,7 +20,7 @@ public:
 	void Dispose();
 	void CollisionHandler();
 
-	int GameState = 1; 	/*Estados Possíveis  	1 - Splash  		2 - Menu		3 - Game		4 - GameOver	*/
+	int GameState = 2; 	/*Estados Possíveis  	1 - Splash  		2 - Menu		3 - Game		4 - GameOver	*/
 
 
 };

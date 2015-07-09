@@ -35,11 +35,12 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 	case ATOR_NASCENDO:
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, REDBOSS_PARADO, false);
-		a->velocidade = 0.2f;
 		
 		break;
 
 	case REDBOSS_PARADO:
+		a->velocidade = 0.2f;
+
 		if (a->estado.subestado == ESTADO_INICIO)
 		{
 			ATOR_TrocaAnimacao(a, 0);

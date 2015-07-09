@@ -22,8 +22,7 @@ Animacao animaTiroInimigo[] = {
 //
 bool TiroInimigo_Carrega()
 {
-	//return ATOR_CarregaAtorEstatico(TIRO_NAVE, "shoots.png", 96, 96, 21, 12, 6, 22, animaTiro, true, 0, 0, &Tiro_Atualiza);
-	return ATOR_CarregaAtorEstatico(TIRO_INIMIGO, "singleshoot.png", 22, 6, 0, 0, 22, 6, animaTiroInimigo, true, 0, 0, &TiroInimigo_Atualiza);
+	return ATOR_CarregaAtorEstatico(TIRO_INIMIGO, "shootenemy.png", 22, 6, 0, 0, 22, 6, animaTiroInimigo, true, 0, 0, &TiroInimigo_Atualiza);
 
 }
 

@@ -34,6 +34,8 @@ int numinimigosBT = 0;
 int numinimigosMR = 0;
 int numinimigosSH = 0;
 int numinimigosRB = 0;
+int numTirosInimigos = 20; 
+
 
 int fuel = 100; 
 bool tocandomusica = false; 
@@ -51,6 +53,8 @@ Ator **inimigosMR;//minired
 Ator **inimigosSH;//minired
 Ator **ocorrencias;//alertas
 Ator **inimigosRB; //redBoss
+Ator **tirosInimigos;
+
 Ator *redboss;
 Ator *minired;
 Ator *batrobo;
@@ -104,7 +108,7 @@ void Shutar::Setup()
 	bool cminired = MiniRed_Carrega();
 	bool cbatrobo = BatRobo_Carrega();
 	bool cocorrencia = Ocorrencia_Carrega();
-	bool cmrAvenger = MiniRed_Carrega(); 
+	
 
 //inimigo MiniShooter
 	bool cminishooter = MiniShooter_Carrega();
@@ -126,7 +130,7 @@ void Shutar::Setup()
 
 	int tpX = 0, tpY = 0; //apenas referencia para coord serem trazidas  
 
-	//PROCURA SABER NUMERO TOTAL DE INIMIGOS
+	//PROCURA SABER NUMERO TOTAL DE INIMIGOS TIPO BAT 
 	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGO_BT, &tpX, &tpY))
 	{
 		numinimigosBT++;
@@ -137,12 +141,24 @@ void Shutar::Setup()
 	tpX = 0;
 	tpY = 0;
 
-	//PROCURA SABER NUMERO TOTAL DE INIMIGOS
+	//PROCURA SABER NUMERO TOTAL DE INIMIGOS TIPO MINIRED
 	if (C2D2M_PrimeiroBlocoMarca(mapa, MARCA_INIMIGOS_MINIRED, &tpX, &tpY))
 	{
 		numinimigosMR++;
 		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
 			numinimigosMR++;
+	}
+
+
+	tpX = 0;
+	tpY = 0;
+
+	//PROCURA SABER NUMERO TOTAL DE INIMIGOS TIPO MINISHOOTER
+	if (C2D2M_PrimeiroBlocoMarca(mapa, C2D2M_FIM, &tpX, &tpY))
+	{
+		numinimigosSH++;
+		while (C2D2M_ProximoBlocoMarca(mapa, &tpX, &tpY))
+			numinimigosSH++;
 	}
 
 
@@ -205,10 +221,40 @@ void Shutar::Setup()
 	}
 		//redboss = ATOR_CriaAtor(REDBOSS, -5, 5, 0);
 
-	if (cmrAvenger)
+
+	if (ctiroInimigo)
 	{
 
-		miniredAgenger = 0; 
+		tirosInimigos = (Ator**)malloc(sizeof(Ator*)*numTirosInimigos);
+		memset(tirosInimigos, 0, numTirosInimigos*sizeof(Ator*));
+
+		//posicao temporaria para referencia
+		int xini, yini = 0;
+		int indO = 0;
+
+		tirosInimigos[indO++] = 0;
+		while (indO < numTirosInimigos)
+			tirosInimigos[indO++] = 0;
+
+	}
+
+	if (cminishooter)
+	{
+
+
+		inimigosSH = (Ator**)malloc(sizeof(Ator*)*numinimigosSH);
+		memset(inimigosSH, 0, numinimigosSH*sizeof(Ator*));
+
+		//posicao temporaria para referencia
+		int xini, yini = 0;
+		int indO = 0;
+
+		if (C2D2M_PrimeiroBlocoMarca(mapa, C2D2M_FIM, &xini, &yini))
+		{
+			inimigosSH[indO++] = ATOR_CriaAtor(MINISHOOTER, xini, yini, 0);
+			while (C2D2M_ProximoBlocoMarca(mapa, &xini, &yini))
+				inimigosSH[indO++] = ATOR_CriaAtor(MINISHOOTER, xini, yini, 0);
+		}
 	}
 
 	if (cminired)
@@ -298,6 +344,17 @@ void Shutar::Update(int gamestate)
 		posXNave = nave->x;
 		posYNave = nave->y;
 
+		for (int i = 0; i < numinimigosSH; i++)
+		{
+			Evento evt;
+			evt.tipoEvento = EVT_POSICAO;
+			evt.x = posXNave;
+			evt.y = posYNave;
+			ATOR_EnviaEvento(inimigosSH[i], &evt);
+			//printf("passou coordenada");
+		}
+
+
 			for (int i = 0; i < numinimigosMR; i++)
 			{
 				Evento evt;
@@ -340,16 +397,8 @@ void Shutar::Update(int gamestate)
 			ATOR_AplicaEstado(nave, mapa, LARGURA_TELA, ALTURA_TELA);
 			Nave_Atualiza(nave, mapa);
 
-			//atualiza redboss
-			/*ATOR_AplicaEstado(redboss, mapa, LARGURA_TELA, ALTURA_TELA);
-			RedBoss_Atualiza(redboss, mapa);*/
 
-			////atualiza minired
-			//ATOR_AplicaEstado(minired, mapa, LARGURA_TELA, ALTURA_TELA);
-			//MiniRed_Atualiza(minired, mapa);
-
-
-			// atualiza  as inimigos 
+			// atualiza  as inimigos RB
 			for (int i = 0; i < numinimigosRB; i++)
 		{	
 				ATOR_AplicaEstado(inimigosRB[i], mapa, LARGURA_TELA, ALTURA_TELA);
@@ -364,6 +413,15 @@ void Shutar::Update(int gamestate)
 				// Aplica o estado da propulsao
 				ATOR_Atualiza(inimigos[i], mapa);
 			}
+
+			// atualiza  as inimigos MSHOOTER
+			for (int i = 0; i < numinimigosSH; i++)
+			{
+				ATOR_AplicaEstado(inimigosSH[i], mapa, LARGURA_TELA, ALTURA_TELA);
+				// Aplica o estado da propulsao
+				ATOR_Atualiza(inimigosSH[i], mapa);
+			}
+
 
 
 
@@ -427,6 +485,31 @@ void Shutar::Update(int gamestate)
 							miniredAgenger = ATOR_CriaAtor(MINIRED, ev.x, ev.y, ev.valor);
 					
 							break;
+
+						case TIRO_INIMIGO:
+						{
+							// Se o tiro é nulo, pode criar um novo
+
+							if (tirosInimigos[0] == 0)
+							{
+							tirosInimigos[0] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
+							ATOR_TocaEfeitoTela(nave, 0, mapa);
+							}
+
+
+							//for (int i = 0; i < numTirosInimigos; i++)
+							//{
+							//	if (tirosInimigos[i] == 0)
+							//	{
+							//		printf("atirou!\n");
+							//			tirosInimigos[i] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
+							//		ATOR_TocaEfeitoTela(nave, 0, mapa);
+							//		
+
+							//	}
+							//} //fim for
+
+						}
 
 
 						}
@@ -496,6 +579,13 @@ void Shutar::Draw()
 		for (int i = 0; i < numinimigosMR; i++)
 		{
 			ATOR_Desenha(inimigosMR[i], mapa, 0, 0);
+
+		}
+
+		// Aplica as inimigos SH
+		for (int i = 0; i < numinimigosSH; i++)
+		{
+			ATOR_Desenha(inimigosSH[i], mapa, 0, 0);
 
 		}
 
@@ -610,17 +700,33 @@ void Shutar::CollisionHandler(){
 
 		}
 
-		//checa colisao com minireds
+		//checa colisao com MiniShooter
+		for (int i = 0; i < numinimigosSH; i++)
+		{
+			if (ATOR_ColidiuAtores(tiro, inimigosSH[i]))
+			{
+				Evento ev;
+				ATOR_EnviaEvento(inimigosSH[i], &ev);
+				printf("\nacertou um mshooter");
+			}
+
+		}
+
+		//checa colisao com MiniShooter
 		for (int i = 0; i < numinimigosMR; i++)
 		{
 			if (ATOR_ColidiuAtores(tiro, inimigosMR[i]))
 			{
 				Evento ev;
+				ev.subtipo = TIRO_NAVE;
 				ATOR_EnviaEvento(inimigosMR[i], &ev);
-				printf("\nacertou um mini");
+				printf("\nacertou um miniRed");
 			}
 
 		}
+
+
+
 
 		//checa colisao tiro reboss 
 		for (int i = 0; i < numinimigosRB; i++)

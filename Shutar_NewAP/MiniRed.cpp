@@ -4,11 +4,11 @@
 #include "MiniRed.h"
 #include "Shutar.h"
 #include <math.h>
-//Animacao
-// Vetor com as animações da nave (3 no total)
-Animacao animaMiniRed[] = {
+		 //Animacao
+		 // Vetor com as animações da nave (3 no total)
+		 Animacao animaMiniRed[] = {
 	// Ordem: número de quadros, tempo entre os quadros, vetor com a seqüência de quadros
-	{ 1, 1, { 0 } }
+			 { 1, 1, { 0 } }
 
 };
 
@@ -34,35 +34,49 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, MINIRED_PARADO, false);
 		break;
-	case MINIRED_PARADO:
 
-		a->velocidade = 0; 
+	case MINIRED_PARADO:
+		if (a->estado.subestado == ESTADO_INICIO)
+		{
+			// coloca a animação da nave parada
+			ATOR_TrocaAnimacao(a, 0);
+			// Troca o sub-estado
+			a->estado.subestado = ESTADO_RODANDO;
+		}
+
+		a->velocidade = 0;
 
 		while (ATOR_ProximoEvento(a, &ev))
 		{
-		case EVT_POSICAO:
-			//if ((unsigned int)(ev.y - a->y) < 250 && (unsigned int)(ev.x - a->x) < 250
-
-			if (
-
-
-				(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) < 250 ||
-
-				(unsigned int)(a->y - ev.y) < 250 && (unsigned int)(a->x - ev.x) *-1 < 250 ||
-
-				(unsigned int)(a->y - ev.y) *-1 < 250 && (unsigned int)(a->x - ev.x) *-1< 250 ||
-
-				(unsigned int)(a->y - ev.y) *-1< 250 && (unsigned int)(a->x - ev.x) < 250
-
-				)
+			switch (ev.tipoEvento)
 			{
-				ATOR_TrocaEstado(a, MINIRED_DESLOCANDO, false);
-			}
 
-			break;
+			case EVT_POSICAO:
+				if (
+					(a->y - ev.y) < 250 && (a->x - ev.x) < 250 ||
+
+					(a->y - ev.y) < 250 && (a->x - ev.x) *-1 < 250 ||
+
+					(a->y - ev.y) *-1 < 250 && (a->x - ev.x) *-1 < 250 ||
+
+					(a->y - ev.y) *-1 < 250 && (a->x - ev.x) < 250
+					)
+				{
+					ATOR_TrocaEstado(a, MINIRED_DESLOCANDO, false);
+				}
+
+				break;
+
+				//EVENTOU COLISAO
+			case EVT_COLIDIU_PERSONAGEM:
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				break;
+
+			}//FIM SWITCH EVENTOS
 
 		}
-		break;
+
+		break; //FIM ESTADO 
 
 	case MINIRED_DESLOCANDO:
 	{
@@ -71,84 +85,89 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 		if (a->estado.subestado == ESTADO_INICIO)
 		{		// coloca a animação da nave parada
-				ATOR_TrocaAnimacao(a, 0);
-				// Troca o sub-estado
-				a->estado.subestado = ESTADO_RODANDO;
-				//a->direcao = a->olhandoPara;
-		
+			ATOR_TrocaAnimacao(a, 0);
+			// Troca o sub-estado
+			a->estado.subestado = ESTADO_RODANDO;
+			//a->direcao = a->olhandoPara;
+
 		}
 
-		a->velocidade = 4.4f;
+		a->velocidade = .4f;
 
 
-			while (ATOR_ProximoEvento(a, &ev))
+		while (ATOR_ProximoEvento(a, &ev))
+		{
+			switch (ev.tipoEvento)
 			{
-				switch (ev.tipoEvento)
+
+				//EVENTOU COLISAO
+			case EVT_COLIDIU_PERSONAGEM:
+				printf("\nCHEGOU ATÉ AQUI!!!!!!!!!!!!!!");
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+				break;
+
+
+			case EVT_POSICAO:
+			{
+				if (
+
+					(a->y - ev.y) > 250 && (a->x - ev.x) > 250 ||
+
+					(a->y - ev.y) > 250 && (a->x - ev.x) *-1 > 250 ||
+
+					(a->y - ev.y) *-1 > 250 && (a->x - ev.x) *-1 > 250 ||
+
+					(a->y - ev.y) *-1 > 250 && (a->x - ev.x) > 250
+
+					)
+
 				{
-				case EVT_COLIDIU_PERSONAGEM:
-					if (ev.subtipo = TIRO_NAVE)
-					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
-					
-				break; 
-
-				case EVT_POSICAO:
+					ATOR_TrocaEstado(a, MINIRED_PARADO, false);
+				}
+				
+				// Muda a diração na qual o personagem está olhando
+				// Calcula o cateto adjacente e oposto
+				double ca = fabs(a->x - ev.x);
+				double co = fabs(a->y - ev.y);
+				double angulo = 90;
+				// Se o cateto oposto é zero, o angulo é 90º
+				// Senão, calcula
+				if (ca != 0)
+					angulo = atan(co / ca)*RAD_ANG;
+				// Ajusta o quadrante
+				// Primeiro e quarto quadrantes
+				if (ev.x>a->x)
 				{
-					if (
-						
-						(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) > 250 ||
-
-						(unsigned int)(a->y - ev.y) > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
-
-						(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) *-1 > 250 ||
-
-						(unsigned int)(a->y - ev.y) *-1 > 250 && (unsigned int)(a->x - ev.x) > 250
-
-						)
-
+					// Está no quarto?
+					if (ev.y > a->y)
 					{
-						ATOR_TrocaEstado(a, MINIRED_PARADO, false);
+						angulo = 360 - angulo;
 					}
-
-
-
-					// Muda a diração na qual o personagem está olhando
-					// Calcula o cateto adjacente e oposto
-					double ca = fabs(a->x - ev.x);
-					double co = fabs(a->y - ev.y);
-					double angulo = 90;
-					// Se o cateto oposto é zero, o angulo é 90º
-					// Senão, calcula
-					if (ca != 0)
-						angulo = atan(co / ca)*RAD_ANG;
-					// Ajusta o quadrante
-					// Primeiro e quarto quadrantes
-					if (ev.x>a->x)
+				}
+				// Segundo e terceiro quadrantes
+				else
+				{
+					// Terceiro quadrante
+					if (ev.y > a->y)
 					{
-						// Está no quarto?
-						if (ev.y>a->y)
-							angulo = 360 - angulo;
+						angulo += 180;
 					}
-					// Segundo e terceiro quadrantes
+					// Segundo quadrante
 					else
 					{
-						// Terceiro quadrante
-						if (ev.y>a->y)
-							angulo += 180;
-						// Segundo quadrante
-						else
-							angulo = 180 - angulo;
+						angulo = 180 - angulo;
 					}
-					a->olhandoPara = angulo;
-					a->direcao = a->olhandoPara;
-					break;
 				}
+				a->olhandoPara = angulo;
+				a->direcao = a->olhandoPara;
+				break;
+			}
 
 
+			}//fim switch
+		}//FIM WHILE
 
-
-				}//fim switch
-			}//FIM WHILE
-		
 		break;
 	}
 

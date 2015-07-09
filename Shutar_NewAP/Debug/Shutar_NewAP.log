@@ -1,24 +1,8 @@
-﻿Build started 08/07/2015 15:30:36.
+﻿Build started 09/07/2015 02:08:24.
      1>Project "C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Shutar_NewAP\Shutar_NewAP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Nave.cpp
-         Nave.cpp
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(105): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(135): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(136): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(151): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(152): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(210): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(229): warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(243): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(244): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(258): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(259): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(292): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(293): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(303): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(304): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\paulo\documents\visual studio 2013\projects\shutar_newap\shutar_newap\nave.cpp(383): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TiroInimigo.cpp
+         TiroInimigo.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Debug\Shutar_NewAP.lib" /MACHINE:X86 sdl.lib sdlmain.lib opengl32.lib glu32.lib sdl_image.lib sdl_mixer.lib ca2.lib c2d2.lib cator.lib cm2.lib Debug\AtorManager.obj
          Debug\BatRobo.obj
@@ -36,4 +20,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.52
+Time Elapsed 00:00:01.44

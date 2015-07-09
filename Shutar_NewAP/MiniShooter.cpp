@@ -112,7 +112,7 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 				ATOR_EnviaEventoJogo(&ev);
 				a->temporizadores[1] = 120;
 				
-				printf("MR ATIRANDO");
+				printf("\nMR ATIRANDO");
 				break;
 			
 
