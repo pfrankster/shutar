@@ -48,10 +48,12 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 		a->aux_real[1] = a->y;
 
 		// Dá a velocidade e muda a direção em que está olhando
-		a->velocidade = VTIRO +3;
+		a->velocidade = VTIRO;
 		
 		a->olhandoPara = a->direcao;
 		break;
+
+
 	case TIRO_DESLOCANDO:
 	{
 		if (a->estado.subestado == ESTADO_INICIO)
@@ -61,7 +63,7 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 			// Troca o sub-estado
 			a->estado.subestado = ESTADO_RODANDO;
 			// O tiro existe por 1 segundo
-			a->temporizadores[0] = 15;
+			a->temporizadores[0] = 20;
 		}
 		// Enquanto houverem eventos
 		while (ATOR_ProximoEvento(a, &ev))
@@ -75,7 +77,6 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 				{
 					// Se passou a distância, encerra o ator
 					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
-					//tiro = 0;
 					return false;
 				}
 				break;
@@ -101,6 +102,7 @@ bool Tiro_Atualiza(Ator *a, unsigned int idMapa)
 
 		break;
 	}
+
 	case ATOR_ENCERRADO:
 		ev.tipoEvento = EVT_PRESSIONOU_BAIXO;
 		ATOR_EnviaEventoJogo(&ev);

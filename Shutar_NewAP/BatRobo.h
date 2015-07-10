@@ -12,7 +12,7 @@
 
 // Enumeração dos estados da atriz do jogo
 enum {
-	BATROBO_PARADO = ATOR_PROG_INI
+	BATROBO_PARADO = ATOR_PROG_INI, BATROBO_DESLOCANDO
 };
 
 // A função que carrega o personagem atriz (pra facilitar).

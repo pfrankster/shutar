@@ -4,6 +4,8 @@
 #include "MiniShooter.h"
 #include "Shutar.h"
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 //Animacao
 // Vetor com as animações da nave (3 no total)
 Animacao animaMiniShooter[] = {
@@ -34,14 +36,21 @@ bool MiniShooter_Carrega()
 
 bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 {
+
 	Evento ev;
 	switch (a->estado.estado)
 	{
 	case ATOR_NASCENDO:
-		// Muda para o estado adequado
+	{	// Muda para o estado adequado
 		ATOR_TrocaEstado(a, MINISHOOTER_PARADO, false);
 		a->temporizadores[0] = 15;
-		break;
+		int v2 = rand() % 4;
+		v2 < 1 ? v2 = 1 : v2 = v2; 
+		//a->velocidade = 2.1f;
+		a->velocidade = v2;
+
+		break; 
+	}
 
 	case MINISHOOTER_PARADO:
 	{
@@ -55,7 +64,6 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 
 		}
 
-		a->velocidade = 2.1f;
 
 
 		while (ATOR_ProximoEvento(a, &ev))
@@ -112,6 +120,7 @@ bool MiniShooter_Atualiza(Ator *a, unsigned int idMapa)
 					ev.y = a->y;
 					ev.valor = a->olhandoPara;
 					ATOR_EnviaEventoJogo(&ev);
+					
 					a->temporizadores[0] = 120;
 				}
 				

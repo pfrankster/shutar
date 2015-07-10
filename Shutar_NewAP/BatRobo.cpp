@@ -4,6 +4,7 @@
 #include "BatRobo.h"
 #include "Shutar.h"
 #include <math.h>
+#include <stdlib.h>
 //Animacao
 // Vetor com as animações da nave (3 no total)
 Animacao animaBatRobo[] = {
@@ -36,22 +37,50 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 		// Usa valores auxiliares para guardar a posição inicial do tiro
 		a->aux_real[0] = a->x;
 		a->aux_real[1] = a->y;
-		a->velocidade = 0.2f; 
+		a->velocidade = 0; 
+		a->temporizadores[0] = 15;
+
 		break;
 
 	case BATROBO_PARADO:
 		if (a->estado.subestado == ESTADO_INICIO)
 		{
 			// coloca a animação da nave parada
-			ATOR_TrocaAnimacao(a, 0);
 			// Troca o sub-estado
 			a->estado.subestado = ESTADO_RODANDO;
 		}
-		
+		ATOR_TrocaAnimacao(a, 0);
+		a->velocidade = 0; 
 
-			//a->olhandoPara = a->olhandoPara%360 +50;
-		//a->olhandoPara = a->direcao;
-			//a->temporizadores[0] = 100;
+		while (ATOR_ProximoEvento(a, &ev))
+		{
+			switch (ev.tipoEvento)
+			{
+			case EVT_COLIDIU_PERSONAGEM:
+				//if (ev.subtipo = TIRO_NAVE)
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				break;
+
+
+			case EVT_TEMPO:
+			{	if (ev.subtipo == 0)
+					ATOR_TrocaEstado(a, BATROBO_DESLOCANDO, false);
+				int v1 = rand() % 120;
+				//a->temporizadores[0] = 60;
+				a->temporizadores[0] = v1;
+
+				break;
+			}
+			}
+		}
+
+
+		break; 
+
+
+	case BATROBO_DESLOCANDO:
+		
+		Evento ev;
 
 			while (ATOR_ProximoEvento(a, &ev))
 			{
@@ -62,6 +91,16 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
 					break;
 
+
+				case EVT_TEMPO:
+				{	if (ev.subtipo == 0)
+					ATOR_TrocaEstado(a, BATROBO_PARADO, false);
+				/*a->temporizadores[0] = 135;*/
+				int v1 = rand() % 210;
+				a->temporizadores[0] = v1;
+
+				break;
+				}
 				case EVT_POSICAO:
 				{
 
@@ -93,8 +132,14 @@ bool BatRobo_Atualiza(Ator *a, unsigned int idMapa)
 						else
 							angulo = 180 - angulo;
 					}
-					a->olhandoPara = angulo;
-					a->direcao = a->olhandoPara;
+					//a->olhandoPara = angulo;
+					//a->direcao = a->olhandoPara;
+
+
+					a->olhandoPara = ++a->olhandoPara%360 +36;
+					a->direcao = angulo;
+					a->velocidade = 4.1f;
+
 					break;
 				}
 

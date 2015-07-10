@@ -3,8 +3,7 @@
 
 #include <c2d2/ator.h>
 
-#define VNAVE	3
-#define VPULO   1000
+#define VNAVE	6
 
 //ALGUMAS PROPRIEDADES DA NAVE
 

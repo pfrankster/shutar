@@ -9,6 +9,7 @@
 #include "AtorManager.h"
 #include "Nave.h"
 #include "Tiro.h"
+#include "Bomba.h"
 #include "TiroInimigo.h"
 
 #include "RedBoss.h"
@@ -19,7 +20,7 @@
 #include "Ocorrencia.h"
 
 unsigned int musicas[3];
-unsigned int logoPUC, jogorolando, mouseTX, hud_nergy ; //tx simples hub e afins
+unsigned int menu, logoPUC, jogorolando, mouseTX, hud_nergy ; //tx simples hub e afins
 
 unsigned int mapa;
 
@@ -40,13 +41,15 @@ int numTirosInimigos = 20;
 int fuel = 100; 
 bool tocandomusica = false; 
 bool shootOK;
+bool BombaOK;
+
 unsigned int shootType = 1; 
 
 
 //Personagens do jogo
 Ator *nave;
 Ator *tiro;//tironave
-//Ator *prop;
+Ator *bomba;
 
 Ator **inimigos; //bats
 Ator **inimigosMR;//minired
@@ -96,6 +99,7 @@ void Shutar::Setup()
 
 	//carrega sprites simples
 	logoPUC = C2D2_CarregaSpriteSet("splashprojeto.png", 0, 0);
+	menu = C2D2_CarregaSpriteSet("screenmenu.jpg", 0, 0);
 	jogorolando = C2D2_CarregaSpriteSet("jogorolando.png", 0, 0);
 	mouseTX = C2D2_CarregaSpriteSet("mira.png", 24, 24);
 	hud_nergy = C2D2_CarregaSpriteSet("hud_energy.png", 120, 24);
@@ -104,6 +108,7 @@ void Shutar::Setup()
 	//carrega atores do jogo
 	bool cnave = Nave_Carrega(); 
 	bool ctiro = Tiro_Carrega();
+	bool cbomba = Bomba_Carrega();
 	bool credboss = RedBoss_Carrega();
 	bool cminired = MiniRed_Carrega();
 	bool cbatrobo = BatRobo_Carrega();
@@ -201,6 +206,12 @@ void Shutar::Setup()
 		shootOK = false;
 	}
 
+	if (cbomba)
+	{
+
+		BombaOK = false;
+	}
+
 
 	if (credboss)
 	{
@@ -274,10 +285,9 @@ void Shutar::Setup()
 				inimigosMR[indO++] = ATOR_CriaAtor(MINIRED, xini, yini, 0);
 		}
 	}
-		//minired = ATOR_CriaAtor(MINIRED, -5, 5, 0); forma antiga de carregar... direto sem mapa 
+	
 
 	if (cbatrobo)
-		//batrobo = ATOR_CriaAtor(BATROBO, -5, 5, 0);
 	{
 
 		inimigos = (Ator**)malloc(sizeof(Ator*)*numinimigosBT);
@@ -327,7 +337,14 @@ void Shutar::Update(int gamestate)
 	if (gamestate == 1)
 	{
 		if (teclas[C2D2_ENTER].pressionado){ GameState = 2; CA2_FadeMusica(2); tocandomusica = false; }
+		if (teclas[C2D2_C].pressionado){ GameState = 3; CA2_FadeMusica(2); tocandomusica = false; }
+
 		if (teclas[C2D2_ESC].pressionado){ GameState = 10; }
+	}
+
+	if (gamestate == 3)
+	{
+		if (teclas[C2D2_ESC].pressionado){ GameState = 1; }
 	}
 
 
@@ -393,7 +410,10 @@ void Shutar::Update(int gamestate)
 
 
 		//controle jogador
-		Nave_ProcessaControle(nave);
+
+			Nave_ProcessaControle(nave);
+
+		//atualiza nave 
 			ATOR_AplicaEstado(nave, mapa, LARGURA_TELA, ALTURA_TELA);
 			Nave_Atualiza(nave, mapa);
 
@@ -410,7 +430,6 @@ void Shutar::Update(int gamestate)
 			for (int i = 0; i < numinimigosBT; i++)
 			{
 				ATOR_AplicaEstado(inimigos[i], mapa, LARGURA_TELA, ALTURA_TELA);
-				// Aplica o estado da propulsao
 				ATOR_Atualiza(inimigos[i], mapa);
 			}
 
@@ -418,18 +437,17 @@ void Shutar::Update(int gamestate)
 			for (int i = 0; i < numinimigosSH; i++)
 			{
 				ATOR_AplicaEstado(inimigosSH[i], mapa, LARGURA_TELA, ALTURA_TELA);
-				// Aplica o estado da propulsao
 				ATOR_Atualiza(inimigosSH[i], mapa);
 			}
 
 
 
-
-
 			for (int i = 0; i < numTirosInimigos; i++){
 				if (tirosInimigos[i] != 0)
+				{
 					ATOR_AplicaEstado(tirosInimigos[i], mapa, LARGURA_TELA, ALTURA_TELA);
 					ATOR_Atualiza(tirosInimigos[i], mapa);
+				}
 				
 
 					if (!ATOR_Atualiza(tirosInimigos[i], mapa))
@@ -457,6 +475,23 @@ void Shutar::Update(int gamestate)
 				ATOR_Atualiza(ocorrencias[i], mapa);
 			}
 
+
+			//atualiza bomba 
+			if (bomba != 0)
+			{
+				ATOR_AplicaEstado(bomba, 1, LARGURA_TELA, ALTURA_TELA);
+				Tiro_Atualiza(bomba, 1);
+
+			}
+			if (!ATOR_Atualiza(bomba, 1))
+			{
+				free(bomba);
+				bomba = 0; 
+
+			}
+
+
+
 			CollisionHandler(); 
 
 			
@@ -468,9 +503,15 @@ void Shutar::Update(int gamestate)
 				switch (ev.tipoEvento)
 				{
 
-					case	EVT_PRESSIONOU_BAIXO:
-						shootOK = false;
-						break;
+				case	EVT_PRESSIONOU_BAIXO:
+					shootOK = false;
+					tiro = 0;
+					free(tiro);
+					break;
+
+				case	EVT_PRESSIONOU_CIMA:
+					BombaOK = false;
+					break;
 
 					case EVT_CRIA_PERSONAGEM:
 						switch (ev.subtipo)
@@ -486,6 +527,19 @@ void Shutar::Update(int gamestate)
 							}
 
 							break;
+
+						case BOMBA:
+							// Se o tiro é nulo, pode criar um novo
+							if (!BombaOK)
+							{
+								printf("BOMBA!\n");
+								bomba = ATOR_CriaAtor(BOMBA, ev.x, ev.y, ev.valor);
+								ATOR_TocaEfeitoTela(nave, 2, mapa);
+								BombaOK = true;
+							}
+
+							break;
+
 
 						case REDBOSS:
 							// Se o tiro é nulo, pode criar um novo
@@ -540,10 +594,11 @@ void Shutar::Draw()
 	{
 	case 1:
 		//Desenha Splash
-		C2D2_DesenhaSprite(logoPUC, 0, 0, 0); 
+		C2D2_DesenhaSprite(menu, 0, 0, 0); 
 
 		
 		break;
+
 	case 2:
 	{//Desenha GAME
 		//C2D2_DesenhaSprite(jogorolando, 0, 0, 0);
@@ -603,8 +658,11 @@ void Shutar::Draw()
 
 
 
-		if (shootOK)
+		if (tiro)
 			ATOR_Desenha(tiro, mapa, 0, 0);
+
+		if (bomba)
+			ATOR_Desenha(bomba, mapa, 0, 0);
 
 		ATOR_Desenha(nave, mapa, 0, 0);
 
@@ -629,7 +687,8 @@ void Shutar::Draw()
 		break; 
 	}
 	case 3:
-		//Desenha Menu Interno
+		//Desenha Splash
+		C2D2_DesenhaSprite(logoPUC, 0, 0, 0);
 
 
 		break;

@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClCompile Include="AtorManager.cpp" />
     <ClCompile Include="BatRobo.cpp" />
+    <ClCompile Include="Bomba.cpp" />
     <ClCompile Include="MiniRed.cpp" />
     <ClCompile Include="MiniShooter.cpp" />
     <ClCompile Include="Nave.cpp" />
@@ -96,6 +97,7 @@
   <ItemGroup>
     <ClInclude Include="AtorManager.h" />
     <ClInclude Include="BatRobo.h" />
+    <ClInclude Include="Bomba.h" />
     <ClInclude Include="MiniRed.h" />
     <ClInclude Include="MiniShooter.h" />
     <ClInclude Include="Nave.h" />

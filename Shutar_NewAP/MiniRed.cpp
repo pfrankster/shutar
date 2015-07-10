@@ -8,7 +8,8 @@
 		 // Vetor com as animações da nave (3 no total)
 		 Animacao animaMiniRed[] = {
 	// Ordem: número de quadros, tempo entre os quadros, vetor com a seqüência de quadros
-			 { 1, 1, { 0 } }
+			 { 1, 1, { 0 } },
+			 { 1, 1, { 1 } }
 
 };
 
@@ -17,7 +18,7 @@
 //
 bool MiniRed_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(MINIRED, "minired.png", 48, 48, 0, 0, 48, 48, animaMiniRed, true, 0, 0, &MiniRed_Atualiza);
+	return ATOR_CarregaAtorEstatico(MINIRED, "minired2.png", 64, 64, 0, 0, 64, 64, animaMiniRed, true, 0, 0, &MiniRed_Atualiza);
 }
 
 // A função para fazer a lógica do Tiro
@@ -83,8 +84,9 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 		Evento ev;
 
+		ATOR_TrocaAnimacao(a, 1);
 	
-		a->velocidade = .4f;
+		a->velocidade = 1.4f;
 
 
 		while (ATOR_ProximoEvento(a, &ev))

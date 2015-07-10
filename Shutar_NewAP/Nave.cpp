@@ -20,14 +20,14 @@ Animacao animaNave[] = {
 
 };
 
-char *sons[] = { "laser1.ogg", "propulsao.ogg" };
+char *sons[] = { "laser1.ogg", "propulsao.ogg", "bombtimer.ogg" };
 
 
 // A função que carrega o Player
 //
 bool Nave_Carrega()
 {
-	return ATOR_CarregaAtorEstatico(NAVE, "nave_sheet.png", 96, 96, 5, 5, 90, 90, animaNave, true, sons, 2, &Nave_Atualiza);
+	return ATOR_CarregaAtorEstatico(NAVE, "nave_sheet.png", 96, 96, 5, 5, 90, 90, animaNave, true, sons, 3, &Nave_Atualiza);
 }
 
 // A função para fazer a lógica da Nave
@@ -54,7 +54,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		break;
 
 	case NAVE_PARADA:
-		a->velocidade = VNAVE - 1;
+		a->velocidade = VNAVE *0.5f;;
 		if (a->aux_int[3] < 1000)
 		a->aux_int[3]++;
 		
@@ -142,17 +142,34 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 				break;
 
-				/**********************ACHOU CHECKPOINTS **************************************************/
-			case EVT_CHECKPOINT:
+			case EVT_PRESSIONOU_BOTAO4:
 
 				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
-				ev.subtipo = REDBOSS;
+				ev.subtipo = BOMBA;
 
 				ev.x = a->x;
 				ev.y = a->y;
 
 				ev.valor = (int)a->olhandoPara;
 				ATOR_EnviaEventoJogo(&ev);
+
+				a->aux_int[3] -= 150; //reduz energia ao atirar 
+
+				break;
+
+
+
+				/**********************ACHOU CHECKPOINTS **************************************************/
+			case EVT_CHECKPOINT:
+
+				/*ev.tipoEvento = EVT_CRIA_PERSONAGEM;
+				ev.subtipo = REDBOSS;
+
+				ev.x = a->x;
+				ev.y = a->y;
+
+				ev.valor = (int)a->olhandoPara;
+				ATOR_EnviaEventoJogo(&ev);*/
 				break;
 				/************************************************************************/
 			}
@@ -161,16 +178,9 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		break;
 
 	case NAVE_ESTABILIZANDO:
-
-		if (a->estado.subestado == ESTADO_INICIO)
-		{
-			// coloca a animação da nave parada
+			// coloca a animação da nave estabilizando
 			ATOR_TrocaAnimacao(a, 4);
-			//ATOR_TocaEfeitoTela(a, 1, mapa);
 
-			// Troca o sub-estado
-			a->estado.subestado = ESTADO_RODANDO;
-		}
 
 		while (ATOR_ProximoEvento(a, &ev))
 		{
@@ -231,7 +241,6 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 			case EVT_LIBEROU_BOTAO2:
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
-				a->velocidade = VNAVE - 1;
 				break;
 
 
@@ -248,6 +257,22 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 
 				a->aux_int[3] -= 50;
 				break;
+
+			case EVT_PRESSIONOU_BOTAO4:
+
+				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
+				ev.subtipo = BOMBA;
+
+				ev.x = a->x;
+				ev.y = a->y;
+
+				ev.valor = (int)a->olhandoPara;
+				ATOR_EnviaEventoJogo(&ev);
+
+				a->aux_int[3] -= 150; //reduz energia ao atirar 
+
+				break;
+
 
 				/**********************ACHOU CHECKPOINTS **************************************************/
 			case EVT_CHECKPOINT:
@@ -297,6 +322,24 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 				a->aux_int[3] -= 50;
 				//a->temporizadores[0] = 30;
 				break;
+
+			case EVT_PRESSIONOU_BOTAO4:
+
+				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
+				ev.subtipo = BOMBA;
+
+				ev.x = a->x;
+				ev.y = a->y;
+
+				ev.valor = (int)a->olhandoPara;
+				ATOR_EnviaEventoJogo(&ev);
+
+				a->aux_int[3] -= 150; //reduz energia ao atirar 
+
+				break;
+
+
+
 				/***********************************************************************************************/
 			case EVT_CHECKPOINT:
 
@@ -340,8 +383,6 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 			case EVT_LIBEROU_BOTAO2:
 
 				ATOR_TrocaEstado(a, NAVE_PARADA, false);
-				a->velocidade = VNAVE - 1;
-
 				break;
 
 				/*------------------*/
@@ -469,9 +510,23 @@ void Nave_ProcessaControle(Ator *a)
 		}
 	}
 
-	/*freio nave */
+
+
+	//GERA BOMBA
 	//if (mouse->botoes[1].pressionado)
-	if (teclado[C2D2_LSHIFT].pressionado)
+		if (teclado[C2D2_B].pressionado)
+		{
+		if (a->aux_int[3] > 200)
+		{
+			ev.tipoEvento = EVT_PRESSIONOU_BOTAO4;
+			ATOR_EnviaEvento(a, &ev);
+		}
+	}
+
+
+	/*freio nave */
+	if (mouse->botoes[1].pressionado)
+	//if (teclado[C2D2_LSHIFT].pressionado)
 
 
 	{
@@ -480,11 +535,10 @@ void Nave_ProcessaControle(Ator *a)
 
 	}
 
-	//if (mouse->botoes[1].liberado)
-	if (teclado[C2D2_LSHIFT].liberado)
-
+	if (mouse->botoes[1].liberado)
+	//if (teclado[C2D2_LSHIFT].liberado)
 	{
-			ev.tipoEvento = EVT_LIBEROU_BOTAO2;
+		ev.tipoEvento = EVT_LIBEROU_BOTAO2;
 		ATOR_EnviaEvento(a, &ev);
 		
 	}

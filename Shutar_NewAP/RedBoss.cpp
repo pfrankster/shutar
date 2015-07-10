@@ -35,6 +35,7 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 	case ATOR_NASCENDO:
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, REDBOSS_PARADO, false);
+		a->vidas = 10; 
 		
 		break;
 
@@ -64,12 +65,12 @@ bool RedBoss_Atualiza(Ator *a, unsigned int idMapa)
 					ev.subtipo = MINIRED;
 					ev.x = a->x;
 					ev.y = a->y;
-
+					a->vidas--; 
 					ATOR_EnviaEventoJogo(&ev); 
 
 				}
 				
-				if (a->vidas <0)
+				if (a->vidas ==0)
 					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
 				
 				break;
