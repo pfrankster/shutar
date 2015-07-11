@@ -42,6 +42,13 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 	switch (a->estado.estado)
 	{
 
+	case ATOR_ENCERRADO:
+		Evento ev; 
+		ev.tipoEvento = SUBEVT_FIM_FASE_DERROTA;
+		ATOR_EnviaEventoJogo(&ev); 
+		return false; 
+	break; 
+
 	case ATOR_NASCENDO:
 		// Muda para o estado adequado
 		ATOR_TrocaEstado(a, NAVE_PARADA, false);
@@ -49,6 +56,7 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		// A escolha da posição 0 no vetor é arbitrária
 		
 		a->aux_int[3] = 1000; 
+		a->vidas = 10; 
 		
 		a->temporizadores[0] = 1; //??
 		break;
@@ -72,6 +80,45 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 			// se for um evento de movimentação
 			switch (ev.tipoEvento)
 			{
+
+			case EVT_COLIDIU_PERSONAGEM:
+			{
+				//se vida chegou ao fim encerra o ator
+				if (a->vidas <= 0)
+					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+
+				if (ev.subtipo == TIRO_INIMIGO)
+				{
+
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+					//ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+					a->vidas--;
+
+
+				}
+
+				if (ev.subtipo == MINIRED || ev.subtipo == BATROBO || ev.subtipo == MINISHOOTER || ev.subtipo == REDBOSS)
+				{
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+					a->vidas = a->vidas - 3;
+
+
+				}
+
+
+
+			}
+
+			if (a->vidas <= 0)
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				break;
+
+
 				// Caso tenha movido o mouse
 			case EVT_POSICAO:
 			{
@@ -187,6 +234,42 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 			// se for um evento de movimentação
 			switch (ev.tipoEvento)
 			{
+
+			case EVT_COLIDIU_PERSONAGEM:
+			{
+				if (a->vidas <= 0)
+					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+
+				if (ev.subtipo == TIRO_INIMIGO)
+				{
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+					//ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+					a->vidas--;
+
+
+				}
+
+				if (ev.subtipo == MINIRED || ev.subtipo == BATROBO || ev.subtipo == MINISHOOTER || ev.subtipo == REDBOSS)
+				{
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+					a->vidas = a->vidas - 3;
+
+
+				}
+
+
+				//se vida chegou ao fim encerra o ator
+			}
+			if (a->vidas <= 0)
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+				break;
+
 				// Caso tenha movido o mouse
 			case EVT_POSICAO:
 			{
@@ -310,6 +393,43 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 			// se for um evento de movimentação
 			switch (ev.tipoEvento)
 			{
+
+			case EVT_COLIDIU_PERSONAGEM:
+			{
+				if (a->vidas <= 0)
+					ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+
+				if (ev.subtipo == TIRO_INIMIGO)
+				{
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+					//ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+					a->vidas--;
+
+
+				}
+
+				if (ev.subtipo == MINIRED || ev.subtipo == BATROBO || ev.subtipo == MINISHOOTER || ev.subtipo == REDBOSS)
+				{
+					if (a->vidas <= 0)
+						ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+
+
+					a->vidas = a->vidas - 3;
+
+
+				}
+
+
+			//se vida chegou ao fim encerra o ator
+			}
+			if (a->vidas <= 0)
+				ATOR_TrocaEstado(a, ATOR_ENCERRADO, false);
+				break;
+
+
 
 			case EVT_PRESSIONOU_BOTAO3:
 				ev.tipoEvento = EVT_CRIA_PERSONAGEM;
@@ -439,6 +559,8 @@ bool Nave_Atualiza(Ator *a, unsigned int mapa)
 		}
 
 	}
+
+	
 	return true;
 }
 

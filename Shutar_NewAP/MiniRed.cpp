@@ -86,7 +86,7 @@ bool MiniRed_Atualiza(Ator *a, unsigned int idMapa)
 
 		ATOR_TrocaAnimacao(a, 1);
 	
-		a->velocidade = 1.4f;
+		a->velocidade = 2.1f;
 
 
 		while (ATOR_ProximoEvento(a, &ev))

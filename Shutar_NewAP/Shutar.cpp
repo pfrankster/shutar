@@ -20,7 +20,7 @@
 #include "Ocorrencia.h"
 
 unsigned int musicas[3];
-unsigned int menu, logoPUC, jogorolando, mouseTX, hud_nergy ; //tx simples hub e afins
+unsigned int menu, gameoverTela, logoPUC, jogorolando, mouseTX, hud_nergy, damage1, damage2, damage3, damage4, damage5, damage6, damage7, damage8, damage9, damage10; //tx simples hub e afins
 
 unsigned int mapa;
 
@@ -103,6 +103,17 @@ void Shutar::Setup()
 	jogorolando = C2D2_CarregaSpriteSet("jogorolando.png", 0, 0);
 	mouseTX = C2D2_CarregaSpriteSet("mira.png", 24, 24);
 	hud_nergy = C2D2_CarregaSpriteSet("hud_energy.png", 120, 24);
+	gameoverTela = C2D2_CarregaSpriteSet("tela_game_over.png", 0, 0);
+	damage1 = C2D2_CarregaSpriteSet("damage_1.png", 276, 28);
+	damage2 = C2D2_CarregaSpriteSet("damage_2.png", 276, 28);
+	damage3 = C2D2_CarregaSpriteSet("damage_3.png", 276, 28);
+	damage4 = C2D2_CarregaSpriteSet("damage_4.png", 276, 28);
+	damage5 = C2D2_CarregaSpriteSet("damage_5.png", 276, 28);
+	damage6 = C2D2_CarregaSpriteSet("damage_6.png", 276, 28);
+	damage7 = C2D2_CarregaSpriteSet("damage_7.png", 276, 28);
+	damage8 = C2D2_CarregaSpriteSet("damage_8.png", 276, 28);
+	damage9 = C2D2_CarregaSpriteSet("damage_9.png", 276, 28);
+	damage10 = C2D2_CarregaSpriteSet("damage_10.png", 276, 28);
 
 
 	//carrega atores do jogo
@@ -123,6 +134,7 @@ void Shutar::Setup()
 
 	//carrega mapa
 	mapa = C2D2M_CarregaMapaMappy("mapa5.FMP", "sheetstar01.png");
+	//mapa = C2D2M_CarregaMapaMappy("fase01_(90x90).FMP", "sheetstar01.png");
 	
 	int numcamadas = 4;
 	//define a marca inical dos tiles programados da chien
@@ -347,6 +359,11 @@ void Shutar::Update(int gamestate)
 		if (teclas[C2D2_ESC].pressionado){ GameState = 1; }
 	}
 
+	if (gamestate == 4)
+	{
+		if (teclas[C2D2_ESC].pressionado){ GameState = 10; }
+	}
+
 
 	if (gamestate == 2)
 	{
@@ -503,6 +520,10 @@ void Shutar::Update(int gamestate)
 				switch (ev.tipoEvento)
 				{
 
+				case SUBEVT_FIM_FASE_DERROTA:
+					GameState = 4; 
+					break; 
+
 				case	EVT_PRESSIONOU_BAIXO:
 					shootOK = false;
 					tiro = 0;
@@ -520,7 +541,7 @@ void Shutar::Update(int gamestate)
 							// Se o tiro é nulo, pode criar um novo
 							if (!shootOK)
 							{
-								printf("atirou!\n");
+								//printf("atirou!\n");
 								tiro = ATOR_CriaAtor(TIRO_NAVE, ev.x, ev.y, ev.valor);
 								ATOR_TocaEfeitoTela(nave, 0, mapa);
 								shootOK = true;
@@ -549,7 +570,7 @@ void Shutar::Update(int gamestate)
 
 						case MINIRED:
 							// Se o tiro é nulo, pode criar um novo
-							printf("\ngerador recebeu a info e vai gerar um MiniRED");
+							//printf("\ngerador recebeu a info e vai gerar um MiniRED");
 							miniredAgenger = ATOR_CriaAtor(MINIRED, ev.x, ev.y, ev.valor);
 					
 							break;
@@ -563,7 +584,7 @@ void Shutar::Update(int gamestate)
 							{
 								if (tirosInimigos[i] == 0)
 								{
-									printf("atirou!\n");
+									//printf("atirou!\n");
 										tirosInimigos[i] = ATOR_CriaAtor(TIRO_INIMIGO, ev.x, ev.y, ev.valor);
 									ATOR_TocaEfeitoTela(nave, 0, mapa);
 									break;
@@ -681,19 +702,53 @@ void Shutar::Draw()
 
 		C2D2P_RetanguloPintado(coordXbarra, coordYbarra, ent, coordYbarra + 8, 0, 255, 0);
 
-
+		switch (nave->vidas)
+		{
+			
+		case 10:
+			C2D2_DesenhaSprite(damage10, 0, 10, 540);
+			break;
+		case 9:
+			C2D2_DesenhaSprite(damage9, 0, 10, 540);
+			break;
+		case 8:
+			C2D2_DesenhaSprite(damage8, 0, 10, 540);
+			break;
+		case 7:
+			C2D2_DesenhaSprite(damage7, 0, 10, 540);
+			break;
+		case 6:
+			C2D2_DesenhaSprite(damage6, 0, 10, 540);
+			break;
+		case 5:
+			C2D2_DesenhaSprite(damage5, 0, 10, 540);
+			break;
+		case 4:
+			C2D2_DesenhaSprite(damage4, 0, 10, 540);
+			break;
+		case 3:
+			C2D2_DesenhaSprite(damage3, 0, 10, 540);
+			break;
+		case 2:
+			C2D2_DesenhaSprite(damage2, 0, 10, 540);
+			break;
+		case 1:
+			C2D2_DesenhaSprite(damage1, 0, 10, 540);
+			break;
+		}
 
 
 		break; 
 	}
 	case 3:
-		//Desenha Splash
+		//Desenha Creditos
 		C2D2_DesenhaSprite(logoPUC, 0, 0, 0);
 
 
 		break;
 	case 4:
 		//Desenha GameOver
+		C2D2_DesenhaSprite(gameoverTela, 0, 0, 0);
 
 		break;
 
@@ -713,7 +768,7 @@ void Shutar::GameLoop()
 {
 
 	//Tudo que for iniciado precisar ser encerrado ... JANELA ATORES SONS ETC 
-	while (GameState < 4)
+	while (GameState < 5)
 	{
 		//se musica esta tocando não toca de novo
 		if (!tocandomusica)
@@ -752,6 +807,59 @@ void Shutar::GameLoop()
 
 void Shutar::CollisionHandler(){
 
+	for (int i = 0; i < numTirosInimigos; i++)
+	{
+		Evento ev;
+		if (ATOR_ColidiuAtores(nave, tirosInimigos[i]))
+		{
+			ATOR_EnviaEvento(nave, &ev);
+
+
+		}
+
+	}
+
+	for (int i = 0; i < numinimigosBT; i++)
+	{
+		Evento ev;
+		if (ATOR_ColidiuAtores(nave, inimigos[i]))
+		{
+			ATOR_EnviaEvento(nave, &ev);
+
+
+		}
+
+	}
+
+	for (int i = 0; i < numinimigosSH; i++)
+	{
+		Evento ev;
+		if (ATOR_ColidiuAtores(nave, inimigosSH[i]))
+		{
+			ATOR_EnviaEvento(nave, &ev);
+
+
+		}
+
+	}
+
+	for (int i = 0; i < numinimigosMR; i++)
+	{
+		Evento ev;
+		if (ATOR_ColidiuAtores(nave, inimigosMR[i]))
+		{
+			ATOR_EnviaEvento(nave, &ev);
+
+
+		}
+
+	}
+
+
+
+
+
+
 	//trata das colisoes do tiro
 	if (shootOK)
 	{
@@ -766,7 +874,7 @@ void Shutar::CollisionHandler(){
 			{
 				Evento ev;
 				ATOR_EnviaEvento(inimigos[i], &ev);
-				printf("\nacertou um bat");
+				//printf("\nacertou um bat");
 			}
 
 		}
@@ -778,7 +886,7 @@ void Shutar::CollisionHandler(){
 			{
 				Evento ev;
 				ATOR_EnviaEvento(inimigosSH[i], &ev);
-				printf("\nacertou um mshooter");
+				//printf("\nacertou um mshooter");
 			}
 
 		}
@@ -791,7 +899,7 @@ void Shutar::CollisionHandler(){
 				Evento ev;
 				ev.subtipo = TIRO_NAVE;
 				ATOR_EnviaEvento(inimigosMR[i], &ev);
-				printf("\nacertou um miniRed");
+				//printf("\nacertou um miniRed");
 			}
 
 		}
@@ -806,7 +914,7 @@ void Shutar::CollisionHandler(){
 			{
 				Evento ev;
 				ATOR_EnviaEvento(inimigosRB[i], &ev);
-				printf("\nacertou um redboss");
+				//printf("\nacertou um redboss");
 			}
 
 		}

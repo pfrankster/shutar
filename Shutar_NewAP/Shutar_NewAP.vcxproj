@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Chien2D2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Paulo\Documents\Visual Studio 2013\Projects\Shutar_NewAP\Chien2D2\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\Chien2D2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Chien2D2\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
